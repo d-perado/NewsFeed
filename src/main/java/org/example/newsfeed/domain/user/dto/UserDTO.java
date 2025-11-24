@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+public class UserDTO {
 
     private Long id;
     private String nickname;
@@ -21,8 +21,8 @@ public class UserDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public static UserDto from(User user) {
-        return new UserDto(user.getId(),
+    public static UserDTO from(User user) {
+        return new UserDTO(user.getId(),
                 user.getNickname(),
                 user.getEmail(),
                 user.getPassword(),

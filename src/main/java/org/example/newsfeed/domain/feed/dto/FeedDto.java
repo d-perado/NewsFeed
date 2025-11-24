@@ -25,7 +25,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.newsfeed.common.entity.Feed;
-import org.example.newsfeed.domain.user.dto.UserDto;
+import org.example.newsfeed.domain.user.dto.UserDTO;
 
 import java.time.LocalDateTime;
 
@@ -36,14 +36,14 @@ import java.time.LocalDateTime;
 public class FeedDto {
 
     private Long id;
-    private UserDto writer;
+    private UserDTO writer;
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
     public static FeedDto from(Feed feed) {
         return new FeedDto(feed.getId(),
-                UserDto.from(feed.getWriter()),
+                UserDTO.from(feed.getWriter()),
                 feed.getContent(),
                 feed.getCreatedAt(),
                 feed.getUpdatedAt());

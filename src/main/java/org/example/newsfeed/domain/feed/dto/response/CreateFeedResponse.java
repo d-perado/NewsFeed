@@ -2,9 +2,7 @@ package org.example.newsfeed.domain.feed.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.example.newsfeed.domain.feed.dto.FeedDto;
-import org.example.newsfeed.domain.user.dto.UserDto;
 
 import java.time.LocalDateTime;
 
