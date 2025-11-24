@@ -31,20 +31,20 @@ public class FollowController {
 
     @GetMapping("/follower/{userId}")
     public ResponseEntity<Page<UserDTO>> handlerGetAllFollowers(@PathVariable Long userId,
-                                                                @RequestParam int pageSize,
-                                                                @RequestParam int pageNo) {
+                                                                @RequestParam(defaultValue = "0") int page,
+                                                                @RequestParam(defaultValue = "10") int size) {
 
-        Page<UserDTO> result = followService.getAllFollowers(userId, pageSize, pageNo);
+        Page<UserDTO> result = followService.getAllFollowers(userId, page, size);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @GetMapping("/following/{userId}")
     public ResponseEntity<Page<UserDTO>> handlerGetAllFollowings(@PathVariable Long userId,
-                                                                @RequestParam int pageSize,
-                                                                @RequestParam int pageNo) {
+                                                                 @RequestParam(defaultValue = "0") int page,
+                                                                 @RequestParam(defaultValue = "10") int size) {
 
-        Page<UserDTO> result = followService.getAllFollowings(userId, pageSize, pageNo);
+        Page<UserDTO> result = followService.getAllFollowings(userId, page, size);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
