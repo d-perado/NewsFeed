@@ -3,6 +3,7 @@ package org.example.newsfeed.common.auth;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import lombok.*;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
@@ -13,7 +14,7 @@ import java.io.*;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends GenericFilterBean {
     private final JwtTokenProvider jwtTokenProvider;
-
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -23,6 +24,13 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         // 2. validateToken으로 토큰 유효성 검사
         if (token != null && jwtTokenProvider.validateToken(token)) {
             // 토큰이 유효할 경우 토큰에서 Authentication 객체를 가지고 와서 SecurityContext에 저장
+            String isLogout = redisTemplate.opsForValue().get(token);
+            if (isLogout != null) {
+                // 블랙리스트면 인증 처리하지 않음
+                chain.doFilter(request, response);
+                return;
+            }
+
             Authentication authentication = jwtTokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
@@ -37,4 +45,6 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         }
         return null;
     }
+
+
 }

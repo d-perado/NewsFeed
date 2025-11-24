@@ -1,4 +1,4 @@
 package org.example.newsfeed.common.entity;
 
-public class FollowLike {
+public class CommentLike {
 }

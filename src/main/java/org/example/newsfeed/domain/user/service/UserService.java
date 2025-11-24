@@ -8,11 +8,14 @@ import org.example.newsfeed.common.auth.JwtTokenProvider;
 import org.example.newsfeed.domain.user.dto.CreateUserRequest;
 import org.example.newsfeed.domain.user.dto.CreateUserResponse;
 import org.example.newsfeed.domain.user.repository.UserRepository;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +25,7 @@ public class UserService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
+    private final RedisTemplate<String, String> redisTemplate;
 
     // 회원가입 -> 유저생성
     public CreateUserResponse createUser(CreateUserRequest request) {
@@ -34,19 +38,12 @@ public class UserService {
                 savedUser.getNickname(),
                 savedUser.getEmail(),
                 savedUser.getPassword(),
-                savedUser.getIntroduction(),
-                savedUser.getCreatedAt(),
-                savedUser.getUpdatedAt()
+                savedUser.getIntroduction()
         );
     }
-    // 유저조회(단건조회)
-//    @Transactional(readOnly = true)
-//    public
-
-
 
     public JwtToken login(String email, String password) {
-        // 1. username + password 를 기반으로 Authentication 객체 생성
+        // 1.email + password 를 기반으로 Authentication 객체 생성
         // 이때 authentication 은 인증 여부를 확인하는 authenticated 값이 false
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
 
@@ -57,9 +54,17 @@ public class UserService {
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
         return jwtTokenProvider.generateToken(authentication);
 
-
     }
 
+    public void logout(String accessToken){
+        String token = accessToken.substring(7);
+        if (jwtTokenProvider.validateToken(token)){
+            long expiration = jwtTokenProvider.getExpiration(token);
 
+            redisTemplate.opsForValue().set(
+                    token, "logout", expiration, TimeUnit.MILLISECONDS
+            );
+        }
+    }
 
 }

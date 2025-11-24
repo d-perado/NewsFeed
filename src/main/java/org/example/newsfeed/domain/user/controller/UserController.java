@@ -23,16 +23,17 @@ public class UserController {
         CreateUserResponse createdUser = userService.createUser(createUserRequest);
          return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
-    // 단건조회
-    @GetMapping("/{userid}")
-    public void handler(@PathVariable Long userid) {
-
-    }
 
 
     @PostMapping("login")
     public ResponseEntity<JwtToken> handlerlogin(@RequestBody LoginDto loginDto){
         JwtToken jwtToken = userService.login(loginDto.getEmail(),loginDto.getPassword());
         return ResponseEntity.status(HttpStatus.OK).body(jwtToken);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> handlerLogout(@RequestHeader("Authorization") String token){
+        userService.logout(token);
+        return ResponseEntity.status(HttpStatus.OK).body("로그아웃 완료");
     }
 }
