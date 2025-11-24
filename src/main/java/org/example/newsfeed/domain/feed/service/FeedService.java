@@ -78,7 +78,7 @@ public class FeedService {
 
 
     /**
-     * 피드 수정 - 추후, JWT 구현 후 본인만 수정 가능 및 본인이 아닐 때 수정할 시에 예외처리 기능 추가 예정
+     * 피드 수정 - 추후, JWT 구현 후 본인만 수정 가능 및 본인이 아닐 때 수정할 시에 예외처리 기능 추가 구현 예정
      * @param feedId
      * @param request
      * @return
@@ -96,5 +96,19 @@ public class FeedService {
         feedRepository.save(feed);
         FeedDto dto = FeedDto.from(feed);
         return UpdateFeedResponse.from(dto);
+    }
+
+
+    /**
+     * 피드 삭제 - 추후, JWT 구현 후 본인만 삭제 가능 및 본인이 아닐 때 삭제할 시에 예외처리 기능 추가 구현 예정
+     * @param feedId
+     */
+    public void delete(Long feedId) {
+
+        Feed feed = feedRepository.findById(feedId).orElseThrow(
+                () -> new IllegalStateException("해당 피드가 없습니다.")
+        );
+
+        feedRepository.delete(feed);
     }
 }

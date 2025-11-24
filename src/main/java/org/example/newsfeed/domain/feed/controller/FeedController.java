@@ -89,4 +89,19 @@ public class FeedController {
         return ResponseEntity.status(HttpStatus.OK).body(feedService.updateFeed(feedId, request));
     }
 
+
+    /**
+     * 피드 삭제 - 추후, JWT 구현 후 리팩터링 예정
+     * @param feedId
+     * @return
+     */
+    @DeleteMapping("/feeds/{feedId}")
+    public ResponseEntity<Void> handlerDeleteFeed(
+            @PathVariable Long feedId
+    ) {
+
+        feedService.delete(feedId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }
