@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class CreateFeedResponse {
 
     private Long id;
-    private UserDto writer;
+    private String nickname;
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -22,7 +22,7 @@ public class CreateFeedResponse {
     public static CreateFeedResponse from(FeedDto dto) {
         return new CreateFeedResponse(
                 dto.getId(),
-                dto.getWriter(),
+                dto.getWriter().getNickname(),
                 dto.getContent(),
                 dto.getCreatedAt(),
                 dto.getUpdatedAt()
