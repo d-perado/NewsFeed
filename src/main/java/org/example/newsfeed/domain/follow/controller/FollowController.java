@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class FollowController {
 
-    FollowService followService;
+    private final FollowService followService;
 
     @PostMapping("/follow")
     public ResponseEntity<CreateFollowResponse> handlerCreateFollow(@RequestParam Long followedUserId, @RequestParam Long followingUserId) {
