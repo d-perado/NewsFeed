@@ -19,6 +19,13 @@ public class FollowService {
         Follow follow = followRepository.findByFollowedUser_IdAndFollowingUser_Id(followedUserId, followingUserId);
 
         return CreateFollowResponse.from(follow);
+    }
 
+    public void deleteFollow(Long followedUserId, Long followingUserId) {
+        boolean existence = followRepository.existsByFollowedUser_IdAndFollowingUser_Id(followedUserId, followingUserId);
+        if(existence) {
+            throw new RuntimeException();
+        }
+        followRepository.deleteFollowByFollowedUser_IdAndFollowingUser_Id(followedUserId, followingUserId);
     }
 }

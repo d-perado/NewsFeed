@@ -5,6 +5,7 @@ import org.example.newsfeed.domain.follow.dto.CreateFollowResponse;
 import org.example.newsfeed.domain.follow.service.FollowService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,5 +21,12 @@ public class FollowController {
         CreateFollowResponse createFollowResponse = followService.createFollow(followedUserId,followingUserId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createFollowResponse);
+    }
+
+    @DeleteMapping("/follow")
+    public ResponseEntity<Void> handlerDeleteFollow(@RequestParam Long followedUserId, @RequestParam Long followingUserId) {
+        followService.deleteFollow(followedUserId, followingUserId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
