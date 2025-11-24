@@ -15,7 +15,7 @@ public class FollowController {
 
     FollowService followService;
 
-    @PostMapping("/api/follow")
+    @PostMapping("/follow")
     public ResponseEntity<CreateFollowResponse> handlerCreateFollow(@RequestParam Long followedUserId, @RequestParam Long followingUserId) {
         CreateFollowResponse createFollowResponse = followService.createFollow(followedUserId,followingUserId);
 
