@@ -24,16 +24,18 @@ public class FollowService {
 
     @Transactional
     public CreateFollowResponse createFollow(Long followedUserId, Long followingUserId) {
-        boolean existence = followRepository.existsByFollowedUser_IdAndFollowingUser_Id(followedUserId, followingUserId);
-        if (existence) {
-            throw new RuntimeException();
+        if(followedUserId.equals(followingUserId)) {
+            throw new RuntimeException("자기자신팔로우 불가능");
         }
-        User followedUser = userRepository.findById(followedUserId).orElseThrow(
-                () -> new RuntimeException("없는유저")
-        );
-        User followingUser = userRepository.findById(followingUserId).orElseThrow(
-                () -> new RuntimeException("없는유저")
-        );
+
+        boolean existence = followRepository.existsByFollowedUser_IdAndFollowingUser_Id(followedUserId, followingUserId);
+
+        if (existence) {
+            throw new RuntimeException(" ");
+        }
+
+        User followedUser = getUser(followedUserId);
+        User followingUser = getUser(followingUserId);
 
         Follow follow = Follow.from(followedUser, followingUser);
 
@@ -68,5 +70,10 @@ public class FollowService {
 
         return followers.map(x-> UserDTO.from(userRepository.findById(x.getFollowingUser().getId())
                 .orElseThrow(()->new RuntimeException("존재하지않는 유저"))));
+    }
+
+    private User getUser(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 유저입니다."));
     }
 }
