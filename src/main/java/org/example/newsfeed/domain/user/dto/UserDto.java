@@ -1,0 +1,35 @@
+package org.example.newsfeed.domain.user.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.example.newsfeed.common.entity.User;
+
+import java.time.LocalDateTime;
+
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserDto {
+
+    private Long id;
+    private String nickname;
+    private String email;
+    private String password;
+    private boolean isDeleted;
+    private String introduction;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+    public static UserDto from(User user) {
+        return new UserDto(user.getId(),
+                user.getNickname(),
+                user.getEmail(),
+                user.getPassword(),
+                user.isDeleted(),
+                user.getIntroduction(),
+                user.getCreatedAt(),
+                user.getUpdatedAt()
+        );
+    }
+}
