@@ -51,7 +51,7 @@ public class FollowService {
         followRepository.deleteFollowByFollowedUser_IdAndFollowingUser_Id(followedUserId, followingUserId);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Page<UserDTO> findFollowers(Long userId, int pageSize, int pageNo) {
         Pageable pageable = Pageable.ofSize(pageSize).withPage(pageNo);
         Page<Follow> followers = followRepository.findFollowsByFollowedUser_Id(userId, pageable);
@@ -61,7 +61,7 @@ public class FollowService {
                 .orElseThrow(()->new RuntimeException("존재하지않는 유저"))));
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Page<UserDTO> findFollowing(Long userId, int pageSize, int pageNo) {
         Pageable pageable = Pageable.ofSize(pageSize).withPage(pageNo);
         Page<Follow> followers = followRepository.findFollowsByFollowingUser_Id(userId, pageable);
