@@ -2,13 +2,16 @@ package org.example.newsfeed.common.entity;
 
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.newsfeed.domain.feed.dto.request.UpdateFeedRequest;
+import org.example.newsfeed.domain.feed.dto.response.UpdateFeedResponse;
 
 @Entity
 @Table(name = "feeds")
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Feed extends TimeBaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +29,7 @@ public class Feed extends TimeBaseEntity {
         this.content = content;
     }
 
-    public void modify(String content) {
-        this.content = content;
+    public void modify(UpdateFeedRequest request) {
+        this.content = request.getContent() != null ? request.getContent() : this.content;
     }
 }

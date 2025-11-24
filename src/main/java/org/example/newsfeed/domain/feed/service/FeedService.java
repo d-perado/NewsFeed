@@ -1,13 +1,16 @@
 package org.example.newsfeed.domain.feed.service;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.newsfeed.common.entity.Feed;
 import org.example.newsfeed.common.entity.User;
 import org.example.newsfeed.domain.feed.dto.FeedDto;
 import org.example.newsfeed.domain.feed.dto.request.CreateFeedRequest;
+import org.example.newsfeed.domain.feed.dto.request.UpdateFeedRequest;
 import org.example.newsfeed.domain.feed.dto.response.CreateFeedResponse;
 import org.example.newsfeed.domain.feed.dto.response.GetFeedPageResponse;
 import org.example.newsfeed.domain.feed.dto.response.GetFeedResponse;
+import org.example.newsfeed.domain.feed.dto.response.UpdateFeedResponse;
 import org.example.newsfeed.domain.feed.repository.FeedRepository;
 import org.example.newsfeed.domain.user.repository.UserRepository;
 import org.springframework.data.domain.Page;
@@ -71,5 +74,27 @@ public class FeedService {
 
         return GetFeedResponse.from(dto);
 
+    }
+
+
+    /**
+     * 피드 수정 - 추후, JWT 구현 후 본인만 수정 가능 및 본인이 아닐 때 수정할 시에 예외처리 기능 추가 예정
+     * @param feedId
+     * @param request
+     * @return
+     */
+    public UpdateFeedResponse updateFeed(Long feedId, UpdateFeedRequest request) {
+        // 해당 id의 피드가 있는지 확인
+        Feed feed = feedRepository.findById(feedId).orElseThrow(
+                () -> new IllegalStateException("해당 피드가 없습니다.")
+        );
+
+        // 피드 수정
+        feed.modify(request);
+
+        // 수정한 피드 저장소에 저장
+        feedRepository.save(feed);
+        FeedDto dto = FeedDto.from(feed);
+        return UpdateFeedResponse.from(dto);
     }
 }

@@ -3,9 +3,11 @@ package org.example.newsfeed.domain.feed.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.newsfeed.domain.feed.dto.request.CreateFeedRequest;
+import org.example.newsfeed.domain.feed.dto.request.UpdateFeedRequest;
 import org.example.newsfeed.domain.feed.dto.response.CreateFeedResponse;
 import org.example.newsfeed.domain.feed.dto.response.GetFeedPageResponse;
 import org.example.newsfeed.domain.feed.dto.response.GetFeedResponse;
+import org.example.newsfeed.domain.feed.dto.response.UpdateFeedResponse;
 import org.example.newsfeed.domain.feed.service.FeedService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -72,8 +74,19 @@ public class FeedController {
     }
 
 
-    // 게시물 수정, 삭제는 작성자 본인만 처리할 수 있습니다.
+    /**
+     * 피드 수정 - 추후, JWT 구현 후 리팩터링 예정
+     * @param feedId
+     * @param request
+     * @return
+     */
+    @PatchMapping("/feeds/{feedId}")
+    public ResponseEntity<UpdateFeedResponse> handlerUpdateFeed(
+            @PathVariable Long feedId,
+            @Valid @RequestBody UpdateFeedRequest request
+    ) {
 
-
+        return ResponseEntity.status(HttpStatus.OK).body(feedService.updateFeed(feedId, request));
+    }
 
 }
