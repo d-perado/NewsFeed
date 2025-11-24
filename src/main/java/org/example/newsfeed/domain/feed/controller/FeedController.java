@@ -32,9 +32,6 @@ public class FeedController {
 
     /**
      * 피드 생성
-     * @param userId
-     * @param request
-     * @return
      */
     @PostMapping("users/{userId}/feeds")
     public ResponseEntity<CreateFeedResponse> handlerCreateFeed(
@@ -47,9 +44,6 @@ public class FeedController {
 
     /**
      * 피드 전체 조회 - 페이징 처리
-     * @param page
-     * @param size
-     * @return
      */
     @GetMapping("/feeds")
     public ResponseEntity<Page<GetFeedPageResponse>> handlerGetFeeds(
@@ -63,8 +57,6 @@ public class FeedController {
 
     /**
      * 피드 단건 조회
-     * @param feedId
-     * @return
      */
     @GetMapping("/feeds/{feedId}")
     public ResponseEntity<GetFeedResponse> handlerGetOne(
@@ -76,9 +68,6 @@ public class FeedController {
 
     /**
      * 피드 수정 - 추후, JWT 구현 후 리팩터링 예정
-     * @param feedId
-     * @param request
-     * @return
      */
     @PatchMapping("/feeds/{feedId}")
     public ResponseEntity<UpdateFeedResponse> handlerUpdateFeed(
@@ -92,8 +81,6 @@ public class FeedController {
 
     /**
      * 피드 삭제 - 추후, JWT 구현 후 리팩터링 예정
-     * @param feedId
-     * @return
      */
     @DeleteMapping("/feeds/{feedId}")
     public ResponseEntity<Void> handlerDeleteFeed(
