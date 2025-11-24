@@ -29,8 +29,8 @@ public class UserService {
         );
     }
     // 유저조회(단건조회)
-    @Transactional(readOnly = true)
-    public
+//    @Transactional(readOnly = true)
+//    public
 
 
 
