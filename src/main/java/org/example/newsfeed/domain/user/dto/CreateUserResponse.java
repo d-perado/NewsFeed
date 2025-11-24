@@ -1,33 +1,28 @@
 package org.example.newsfeed.domain.user.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+
 import lombok.Getter;
+
+import java.time.LocalDateTime;
 
 @Getter
 public class CreateUserResponse {
+    private final Long id;
+    private final String nickname;
+    private final String email;
+    private final String password;
+    private final String introduction;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime updateAt;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(unique = true)
-    private String nickname;
-    @Column
-    private String email;
-    @Column
-    private String password;
-    @Column
-    private boolean isDeleted = false;
-    @Column
-    private String introduction;
-
-    public CreateUserResponse(String nickname, String email, String password, String introduction) {
+    public CreateUserResponse(Long id, String nickname, String email, String password, String introduction, LocalDateTime createdAt, LocalDateTime updateAt) {
+        this.id = id;
         this.nickname = nickname;
         this.email = email;
         this.password = password;
         this.introduction = introduction;
+        this.createdAt = createdAt;
+        this.updateAt = updateAt;
     }
 
 }
