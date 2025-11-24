@@ -30,21 +30,21 @@ public class FollowController {
     }
 
     @GetMapping("/follower/{userId}")
-    public ResponseEntity<Page<UserDTO>> handlerFindFollowers(@PathVariable Long userId,
+    public ResponseEntity<Page<UserDTO>> handlerGetAllFollowers(@PathVariable Long userId,
                                                                 @RequestParam int pageSize,
                                                                 @RequestParam int pageNo) {
 
-        Page<UserDTO> result = followService.findFollowers(userId, pageSize, pageNo);
+        Page<UserDTO> result = followService.getAllFollowers(userId, pageSize, pageNo);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @GetMapping("/following/{userId}")
-    public ResponseEntity<Page<UserDTO>> handlerFindFollowing(@PathVariable Long userId,
+    public ResponseEntity<Page<UserDTO>> handlerGetAllFollowings(@PathVariable Long userId,
                                                                 @RequestParam int pageSize,
                                                                 @RequestParam int pageNo) {
 
-        Page<UserDTO> result = followService.findFollowing(userId, pageSize, pageNo);
+        Page<UserDTO> result = followService.getAllFollowings(userId, pageSize, pageNo);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }

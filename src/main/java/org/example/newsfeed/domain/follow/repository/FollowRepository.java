@@ -17,7 +17,6 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
     JOIN FETCH f.followedUser
     WHERE f.followedUser.id = :userId
 """)
-
     Page<Follow> findFollowsByFollowedUser_Id(Long userId, Pageable pageable);
 
     @Query("""
@@ -29,4 +28,5 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
     Page<Follow> findFollowsByFollowingUser_Id(Long userId, Pageable pageable);
 
     void deleteFollowByFollowedUser_IdAndFollowingUser_Id(Long followedUserId, Long followingUserId);
+
 }
