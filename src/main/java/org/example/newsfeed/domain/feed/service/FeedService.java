@@ -6,8 +6,11 @@ import org.example.newsfeed.common.entity.User;
 import org.example.newsfeed.domain.feed.dto.FeedDto;
 import org.example.newsfeed.domain.feed.dto.request.CreateFeedRequest;
 import org.example.newsfeed.domain.feed.dto.response.CreateFeedResponse;
+import org.example.newsfeed.domain.feed.dto.response.GetFeedPageResponse;
 import org.example.newsfeed.domain.feed.repository.FeedRepository;
 import org.example.newsfeed.domain.user.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,5 +40,12 @@ public class FeedService {
         FeedDto dto = FeedDto.from(feed);
 
         return CreateFeedResponse.from(dto);
+    }
+
+    // 전체 조회
+    @Transactional(readOnly = true)
+    public Page<GetFeedPageResponse> getFeeds(Pageable pageable) {
+        Page<Feed> feedList = feedRepository.findAll(pageable);
+        return feedList.map(i -> GetFeedPageResponse.from(FeedDto.from(i)));
     }
 }
