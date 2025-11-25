@@ -2,6 +2,8 @@ package org.example.newsfeed.domain.feed.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.newsfeed.common.auth.CustomUserDetails;
+import org.example.newsfeed.common.auth.CustomUserDetailsService;
 import org.example.newsfeed.domain.feed.dto.request.CreateFeedRequest;
 import org.example.newsfeed.domain.feed.dto.request.UpdateFeedRequest;
 import org.example.newsfeed.domain.feed.dto.response.CreateFeedResponse;
@@ -15,6 +17,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -73,7 +79,11 @@ public class FeedController {
     public ResponseEntity<UpdateFeedResponse> handlerUpdateFeed(
             @PathVariable Long feedId,
             @Valid @RequestBody UpdateFeedRequest request
-    ) {
+            ) {
+
+//        CustomUserDetails user = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = 1L;
+        // id 가져와서 피드의 user_id 와 일치한지 확인 후 / 예외 처리
 
         return ResponseEntity.status(HttpStatus.OK).body(feedService.updateFeed(feedId, request));
     }
