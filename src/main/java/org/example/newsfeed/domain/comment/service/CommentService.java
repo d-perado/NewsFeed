@@ -1,12 +1,12 @@
 package org.example.newsfeed.domain.comment.service;
 
 import org.example.newsfeed.common.entity.User;
-import org.example.newsfeed.domain.comment.model.dto.CommentDTO;
-import org.example.newsfeed.domain.comment.model.request.CreateCommentRequest;
-import org.example.newsfeed.domain.comment.model.request.UpdateCommentRequest;
-import org.example.newsfeed.domain.comment.model.response.CreateCommentResponse;
-import org.example.newsfeed.domain.comment.model.response.GetCommentPageResponse;
-import org.example.newsfeed.domain.comment.model.response.UpdateCommentResponse;
+import org.example.newsfeed.domain.comment.dto.CommentDTO;
+import org.example.newsfeed.domain.comment.dto.request.CreateCommentRequest;
+import org.example.newsfeed.domain.comment.dto.request.UpdateCommentRequest;
+import org.example.newsfeed.domain.comment.dto.response.CreateCommentResponse;
+import org.example.newsfeed.domain.comment.dto.response.GetCommentPageResponse;
+import org.example.newsfeed.domain.comment.dto.response.UpdateCommentResponse;
 import org.example.newsfeed.domain.feed.repository.FeedRepository;
 import org.example.newsfeed.domain.user.repository.UserRepository;
 import org.springframework.data.domain.Page;

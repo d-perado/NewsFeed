@@ -1,8 +1,8 @@
-package org.example.newsfeed.domain.comment.model.response;
+package org.example.newsfeed.domain.comment.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.example.newsfeed.domain.comment.model.dto.CommentDTO;
+import org.example.newsfeed.domain.comment.dto.CommentDTO;
 
 import java.time.LocalDateTime;
 
