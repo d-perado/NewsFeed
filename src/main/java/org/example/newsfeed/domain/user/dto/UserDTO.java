@@ -16,7 +16,6 @@ public class UserDTO {
     private String nickname;
     private String email;
     private String password;
-    private boolean isDeleted;
     private String introduction;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -26,7 +25,6 @@ public class UserDTO {
                 user.getNickname(),
                 user.getEmail(),
                 user.getPassword(),
-                user.isDeleted(),
                 user.getIntroduction(),
                 user.getCreatedAt(),
                 user.getUpdatedAt()
