@@ -3,7 +3,7 @@ package org.example.newsfeed.common.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.newsfeed.domain.comment.model.request.UpdateCommentRequest;
+import org.example.newsfeed.domain.comment.dto.request.UpdateCommentRequest;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;

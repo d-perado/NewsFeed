@@ -1,11 +1,11 @@
 package org.example.newsfeed.domain.comment.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.newsfeed.domain.comment.model.request.CreateCommentRequest;
-import org.example.newsfeed.domain.comment.model.response.CreateCommentResponse;
-import org.example.newsfeed.domain.comment.model.request.UpdateCommentRequest;
-import org.example.newsfeed.domain.comment.model.response.GetCommentPageResponse;
-import org.example.newsfeed.domain.comment.model.response.UpdateCommentResponse;
+import org.example.newsfeed.domain.comment.dto.request.CreateCommentRequest;
+import org.example.newsfeed.domain.comment.dto.response.CreateCommentResponse;
+import org.example.newsfeed.domain.comment.dto.request.UpdateCommentRequest;
+import org.example.newsfeed.domain.comment.dto.response.GetCommentPageResponse;
+import org.example.newsfeed.domain.comment.dto.response.UpdateCommentResponse;
 import org.example.newsfeed.domain.comment.service.CommentService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -1,4 +1,4 @@
-package org.example.newsfeed.domain.comment.model.dto;
+package org.example.newsfeed.domain.comment.dto;
 
 
 import lombok.AllArgsConstructor;

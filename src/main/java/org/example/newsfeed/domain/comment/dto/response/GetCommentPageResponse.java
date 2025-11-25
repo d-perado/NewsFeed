@@ -1,14 +1,14 @@
-package org.example.newsfeed.domain.comment.model.response;
+package org.example.newsfeed.domain.comment.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.example.newsfeed.domain.comment.model.dto.CommentDTO;
-
+import org.example.newsfeed.domain.comment.dto.CommentDTO;
 import java.time.LocalDateTime;
+
 
 @Getter
 @AllArgsConstructor
-public class UpdateCommentResponse {
+public class GetCommentPageResponse {
 
     private Long id;
     private String nickname;
@@ -16,8 +16,8 @@ public class UpdateCommentResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public static UpdateCommentResponse from(CommentDTO dto) {
-        return new UpdateCommentResponse(
+    public static GetCommentPageResponse from(CommentDTO dto) {
+        return new GetCommentPageResponse(
                 dto.getId(),
                 dto.getUser().getNickname(),
                 dto.getContent(),

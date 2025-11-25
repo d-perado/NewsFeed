@@ -1,4 +1,4 @@
-package org.example.newsfeed.domain.comment.model.request;
+package org.example.newsfeed.domain.comment.dto.request;
 
 import lombok.Getter;
 
