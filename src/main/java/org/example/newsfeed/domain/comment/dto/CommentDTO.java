@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.newsfeed.common.entity.Comment;
-import org.example.newsfeed.domain.feed.model.dto.FeedDTO;
-import org.example.newsfeed.domain.user.model.dto.UserDTO;
+import org.example.newsfeed.domain.feed.dto.FeedDTO;
+import org.example.newsfeed.domain.user.dto.UserDTO;
 import java.time.LocalDateTime;
 
 @Getter

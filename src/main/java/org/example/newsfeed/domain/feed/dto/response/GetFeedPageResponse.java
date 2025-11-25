@@ -2,8 +2,7 @@ package org.example.newsfeed.domain.feed.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.example.newsfeed.domain.feed.dto.FeedDto;
+import org.example.newsfeed.domain.feed.dto.FeedDTO;
 
 import java.time.LocalDateTime;
 
@@ -17,7 +16,7 @@ public class GetFeedPageResponse {
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
-    public static GetFeedPageResponse from(FeedDto dto) {
+    public static GetFeedPageResponse from(FeedDTO dto) {
         return new GetFeedPageResponse(
                 dto.getId(),
                 dto.getWriter().getNickname(),

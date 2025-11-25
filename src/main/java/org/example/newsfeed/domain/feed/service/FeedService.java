@@ -1,12 +1,11 @@
 package org.example.newsfeed.domain.feed.service;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.newsfeed.common.entity.Feed;
 import org.example.newsfeed.common.entity.User;
 import org.example.newsfeed.common.exception.CustomException;
 import org.example.newsfeed.common.exception.ErrorMessage;
-import org.example.newsfeed.domain.feed.dto.FeedDto;
+import org.example.newsfeed.domain.feed.dto.FeedDTO;
 import org.example.newsfeed.domain.feed.dto.request.CreateFeedRequest;
 import org.example.newsfeed.domain.feed.dto.request.UpdateFeedRequest;
 import org.example.newsfeed.domain.feed.dto.response.CreateFeedResponse;
@@ -40,7 +39,7 @@ public class FeedService {
 
         Feed feed = new Feed(user, request.getContent());
         feedRepository.save(feed);
-        FeedDto dto = FeedDto.from(feed);
+        FeedDTO dto = FeedDTO.from(feed);
 
         return CreateFeedResponse.from(dto);
     }
@@ -51,7 +50,7 @@ public class FeedService {
     @Transactional(readOnly = true)
     public Page<GetFeedPageResponse> getFeeds(Pageable pageable) {
         Page<Feed> feedList = feedRepository.findAll(pageable);
-        return feedList.map(i -> GetFeedPageResponse.from(FeedDto.from(i)));
+        return feedList.map(i -> GetFeedPageResponse.from(FeedDTO.from(i)));
     }
 
 
@@ -65,7 +64,7 @@ public class FeedService {
                 () -> new CustomException(ErrorMessage.NOT_FOUND_FEED)
         );
 
-        FeedDto dto = FeedDto.from(feed);
+        FeedDTO dto = FeedDTO.from(feed);
 
         return GetFeedResponse.from(dto);
 
@@ -86,7 +85,7 @@ public class FeedService {
 
         // 수정한 피드 저장소에 저장
         feedRepository.save(feed);
-        FeedDto dto = FeedDto.from(feed);
+        FeedDTO dto = FeedDTO.from(feed);
         return UpdateFeedResponse.from(dto);
     }
 
