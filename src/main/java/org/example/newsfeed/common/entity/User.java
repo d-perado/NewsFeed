@@ -14,6 +14,7 @@ import java.util.List;
 @Table(name = "users")
 @Getter
 @NoArgsConstructor
+
 public class User extends TimeBaseEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
