@@ -33,7 +33,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FeedDto {
+public class FeedDTO {
 
     private Long id;
     private UserDTO writer;
@@ -41,8 +41,8 @@ public class FeedDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public static FeedDto from(Feed feed) {
-        return new FeedDto(feed.getId(),
+    public static FeedDTO from(Feed feed) {
+        return new FeedDTO(feed.getId(),
                 UserDTO.from(feed.getWriter()),
                 feed.getContent(),
                 feed.getCreatedAt(),

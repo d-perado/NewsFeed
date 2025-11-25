@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @RequiredArgsConstructor
-public class CreateUserResponse {
+public class GetOneUserResponse {
 
     private final Long id;
     private final String nickname;

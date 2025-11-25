@@ -34,8 +34,6 @@ public class SecurityConfig {
                                 // 로그인 API는 누구나 접근 가능
                                 .requestMatchers("/users", "/users/login").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/users/*").permitAll()
-                                //"USER" 권한 가진 사람만 접근 가능(관리자 기능 사용할때 유용)
-//                        .requestMatchers("/members/test").hasRole("USER")
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
