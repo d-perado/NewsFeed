@@ -24,16 +24,9 @@ public class UserController {
          return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
-
     @PostMapping("login")
-    public ResponseEntity<JwtToken> handlerlogin(@RequestBody LoginDto loginDto){
+    public ResponseEntity<JwtToken> handlerLogin(@RequestBody LoginDto loginDto){
         JwtToken jwtToken = userService.login(loginDto.getEmail(),loginDto.getPassword());
         return ResponseEntity.status(HttpStatus.OK).body(jwtToken);
-    }
-
-    @PostMapping("/logout")
-    public ResponseEntity<String> handlerLogout(@RequestHeader("Authorization") String token){
-        userService.logout(token);
-        return ResponseEntity.status(HttpStatus.OK).body("로그아웃 완료");
     }
 }

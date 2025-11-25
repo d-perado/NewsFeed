@@ -3,7 +3,6 @@ package org.example.newsfeed.common.auth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -20,7 +19,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final RedisTemplate<String, String> redisTemplate;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -33,15 +31,14 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // URL 주소별 접근 권한 설정
                 .authorizeHttpRequests(auth -> auth
-                        // 로그인 API는 누구나 접근 가능
-                        .requestMatchers(HttpMethod.POST, "/users/logout").permitAll()
-                        .requestMatchers("/users", "/users/login").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/users/*").permitAll()
-                        //"USER" 권한 가진 사람만 접근 가능(관리자 기능 사용할때 유용)
+                                // 로그인 API는 누구나 접근 가능
+                                .requestMatchers("/users", "/users/login").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/users/*").permitAll()
+                                //"USER" 권한 가진 사람만 접근 가능(관리자 기능 사용할때 유용)
 //                        .requestMatchers("/members/test").hasRole("USER")
-                        .anyRequest().authenticated()
+                                .anyRequest().authenticated()
                 )
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, redisTemplate), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
