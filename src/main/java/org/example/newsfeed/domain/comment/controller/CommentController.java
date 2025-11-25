@@ -1,18 +1,19 @@
 package org.example.newsfeed.domain.comment.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.newsfeed.common.entity.Comment;
 import org.example.newsfeed.domain.comment.model.request.CreateCommentRequest;
 import org.example.newsfeed.domain.comment.model.response.CreateCommentResponse;
 import org.example.newsfeed.domain.comment.model.request.UpdateCommentRequest;
-import org.example.newsfeed.domain.comment.model.response.GetCommentResponse;
+import org.example.newsfeed.domain.comment.model.response.GetCommentPageResponse;
 import org.example.newsfeed.domain.comment.model.response.UpdateCommentResponse;
 import org.example.newsfeed.domain.comment.service.CommentService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,7 +22,7 @@ public class CommentController {
     private final CommentService commentService;
 
     // 생성
-    @PostMapping("/api/{feedId}/comments")
+    @PostMapping("/users/{userId}/feeds/{feedId}/comments")
     public ResponseEntity<CreateCommentResponse> handlerCreateComment(
             @PathVariable("feedId") Long feedId,
             @PathVariable("userId") Long userId,
@@ -32,15 +33,20 @@ public class CommentController {
 
 
     // 조회
-    @GetMapping("/api/comments")
-    public ResponseEntity<GetCommentResponse> handlerGetAllComments(
-            @PathVariable Long commentId
-    ) {
-        return ResponseEntity.status(HttpStatus.OK).body(commentService.getAll(commentId));
+    @GetMapping("/comments")
+    public ResponseEntity<Page<GetCommentPageResponse>> handlerGetComment(@PageableDefault(
+            size = 10,
+            page = 0,
+            sort = "createdAt",
+            direction = Sort.Direction.DESC
+    ) Pageable pageable) {
+
+        return ResponseEntity.ok(commentService.getAll(pageable));
     }
 
+
     // 수정
-    @PatchMapping("/api/comments/{commentId}")
+    @PatchMapping("/comments/{commentId}")
     public ResponseEntity<UpdateCommentResponse> handlerUpdateComment(
             @PathVariable Long commentId,
             @RequestBody UpdateCommentRequest request
@@ -49,7 +55,7 @@ public class CommentController {
     }
 
     // 삭제
-    @DeleteMapping("/api/comments/{commentId}")
+    @DeleteMapping("/comments/{commentId}")
     public ResponseEntity<Void> handlerDeleteComment(
             @PathVariable Long commentId
     ) {

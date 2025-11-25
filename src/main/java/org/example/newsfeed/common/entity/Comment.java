@@ -3,6 +3,10 @@ package org.example.newsfeed.common.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.newsfeed.domain.comment.model.request.UpdateCommentRequest;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -10,6 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "comments")
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Comment {
 
     @Id
@@ -18,6 +23,14 @@ public class Comment {
 
     @Column
     private String content;
+
+    @CreatedDate
+    @Column(updatable = false) // 생성 시간은 수정되지 않도록 설정
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "feed_id", nullable = false)
@@ -33,8 +46,8 @@ public class Comment {
         this.user = user;
     }
 
-    public void modify(String content) {
-        this.content = content;
+    public void modify(UpdateCommentRequest request) {
+        this.content = request.getContent() != null ? request.getContent() : this.content;
     }
 
 }

@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.example.newsfeed.domain.comment.model.dto.CommentDTO;
 
+import java.time.LocalDateTime;
+
 @Getter
 @AllArgsConstructor
 public class UpdateCommentResponse {
@@ -11,14 +13,16 @@ public class UpdateCommentResponse {
     private Long id;
     private String nickname;
     private String content;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
-    public static UpdateCommentResponse form(CommentDTO dto) {
+    public static UpdateCommentResponse from(CommentDTO dto) {
         return new UpdateCommentResponse(
                 dto.getId(),
                 dto.getUser().getNickname(),
-                dto.getContent()
+                dto.getContent(),
+                dto.getCreatedAt(),
+                dto.getUpdatedAt()
         );
     }
-
-
 }

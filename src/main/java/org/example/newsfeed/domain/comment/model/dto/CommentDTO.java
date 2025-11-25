@@ -7,31 +7,7 @@ import lombok.NoArgsConstructor;
 import org.example.newsfeed.common.entity.Comment;
 import org.example.newsfeed.domain.feed.model.dto.FeedDTO;
 import org.example.newsfeed.domain.user.model.dto.UserDTO;
-
 import java.time.LocalDateTime;
-
-//@Getter
-//@NoArgsConstructor
-//@AllArgsConstructor
-//public class FeedDto {
-//
-//    private Long id;
-//    private UserDto writer;
-//    private String content;
-//    private LocalDateTime createdAt;
-//    private LocalDateTime updatedAt;
-//
-//    public static org.example.newsfeed.domain.feed.model.dto.FeedDto from(Feed feed) {
-//        return new org.example.newsfeed.domain.feed.model.dto.FeedDto(
-//                feed.getId(),
-//                UserDto.from(
-//                        feed.getWriter()
-//                ),
-//                feed.getContent(),
-//                feed.getCreatedAt(),
-//                feed.getUpdatedAt());
-//    }
-//}
 
 @Getter
 @NoArgsConstructor
@@ -52,9 +28,8 @@ public class CommentDTO {
                         comment.getFeed()),
                 UserDTO.from(comment.getUser()),
                 comment.getContent(),
-                comment.getFeed().getCreatedAt(),
-                comment.getFeed().getUpdatedAt()
+                comment.getCreatedAt(),
+                comment.getUpdatedAt()
         );
     }
-
 }

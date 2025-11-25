@@ -5,10 +5,12 @@ import org.example.newsfeed.domain.comment.model.dto.CommentDTO;
 import org.example.newsfeed.domain.comment.model.request.CreateCommentRequest;
 import org.example.newsfeed.domain.comment.model.request.UpdateCommentRequest;
 import org.example.newsfeed.domain.comment.model.response.CreateCommentResponse;
-import org.example.newsfeed.domain.comment.model.response.GetCommentResponse;
+import org.example.newsfeed.domain.comment.model.response.GetCommentPageResponse;
 import org.example.newsfeed.domain.comment.model.response.UpdateCommentResponse;
 import org.example.newsfeed.domain.feed.repository.FeedRepository;
 import org.example.newsfeed.domain.user.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.newsfeed.common.entity.Feed;
@@ -41,8 +43,6 @@ public class CommentService {
                 request.getContent(),
                 feed,
                 user
-
-
         );
         commentRepository.save(comment);
         CommentDTO dto = CommentDTO.from(comment);
@@ -54,32 +54,29 @@ public class CommentService {
 
     // 전체 조회
     @Transactional(readOnly = true)
-    public GetCommentResponse getAll(Long commentId) {
-        Comment comment = commentRepository.findById(commentId).orElseThrow(
-                () -> new IllegalStateException("잘못된 피드입니다.")
-        );
+    public Page<GetCommentPageResponse> getAll(Pageable pageable) {
 
-        CommentDTO dto = CommentDTO.from(comment);
-        return GetCommentResponse.from(dto);
+        Page<Comment> commentPage = commentRepository.findAll(pageable);
 
+        return commentPage.map(comment -> GetCommentPageResponse.from(CommentDTO.from(comment)));
     }
 
     // 댓글 수정
     public UpdateCommentResponse update(Long commentId, UpdateCommentRequest request) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(
-                () -> new IllegalStateException("없는 피드입니다.")
+                () -> new IllegalStateException("없는 댓글입니다.")
         );
-        comment.modify(request.getContent());
+        comment.modify(request);
         CommentDTO dto = CommentDTO.from(comment);
 
-        return UpdateCommentResponse.form(dto);
+        return UpdateCommentResponse.from(dto);
 
     }
 
     public void delete(Long commentId) {
         boolean existence = commentRepository.existsById(commentId);
         if (!existence) {
-            throw new IllegalStateException(" 없는 유저입니다. ");
+            throw new IllegalStateException(" 없는 댓글입니다. ");
         }
         commentRepository.deleteById(commentId);
     }
