@@ -41,10 +41,4 @@ public class SecurityConfig {
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        // BCrypt Encoder 사용
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
 }

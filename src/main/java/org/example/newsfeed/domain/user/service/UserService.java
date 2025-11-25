@@ -17,6 +17,7 @@ import org.example.newsfeed.domain.user.repository.UserRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,12 +32,12 @@ public class UserService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
-
+    private final PasswordEncoder passwordEncoder;
     // 사용자 생성
     @Transactional
     public CreateUserResponse createUser(CreateUserRequest request) {
 
-        User user= new User(request.getNickname(), request.getEmail(), request.getPassword(), request.getIntroduction());
+        User user= new User(request.getNickname(), request.getEmail(),passwordEncoder.encode(request.getPassword()), request.getIntroduction());
         User savedUser = userRepository.save(user);
 
         return new CreateUserResponse(

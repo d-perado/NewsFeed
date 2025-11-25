@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
-
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -27,10 +26,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     private UserDetails createUserDetails(User user) {
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getUsername())
-                .password(passwordEncoder.encode(user.getPassword()))
+                .password(user.getPassword())
                 .roles("USER")
                 .build();
     }
-
-
 }
