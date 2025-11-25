@@ -4,6 +4,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.newsfeed.common.entity.Feed;
 import org.example.newsfeed.common.entity.User;
+import org.example.newsfeed.common.exception.CustomException;
+import org.example.newsfeed.common.exception.ErrorMessage;
 import org.example.newsfeed.domain.feed.dto.FeedDto;
 import org.example.newsfeed.domain.feed.dto.request.CreateFeedRequest;
 import org.example.newsfeed.domain.feed.dto.request.UpdateFeedRequest;
@@ -33,7 +35,7 @@ public class FeedService {
     public CreateFeedResponse createFeed(Long userId, CreateFeedRequest request) {
         // 해당 id의 유저가 있는지 확인
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalStateException("없는 유저입니다.")
+                () -> new CustomException(ErrorMessage.NOT_FOUND_USER)
         );
 
         Feed feed = new Feed(user, request.getContent());
@@ -60,7 +62,7 @@ public class FeedService {
     public GetFeedResponse getOne(Long feedId) {
 
         Feed feed = feedRepository.findById(feedId).orElseThrow(
-                () -> new IllegalStateException("해당 피드가 없습니다.")
+                () -> new CustomException(ErrorMessage.NOT_FOUND_FEED)
         );
 
         FeedDto dto = FeedDto.from(feed);
@@ -76,7 +78,7 @@ public class FeedService {
     public UpdateFeedResponse updateFeed(Long feedId, UpdateFeedRequest request) {
         // 해당 id의 피드가 있는지 확인
         Feed feed = feedRepository.findById(feedId).orElseThrow(
-                () -> new IllegalStateException("해당 피드가 없습니다.")
+                () -> new CustomException(ErrorMessage.NOT_FOUND_FEED)
         );
 
         // 피드 수정
@@ -95,7 +97,7 @@ public class FeedService {
     public void delete(Long feedId) {
 
         Feed feed = feedRepository.findById(feedId).orElseThrow(
-                () -> new IllegalStateException("해당 피드가 없습니다.")
+                () -> new CustomException(ErrorMessage.NOT_FOUND_FEED)
         );
 
         feedRepository.delete(feed);

@@ -33,12 +33,12 @@ public class FeedController {
     /**
      * 피드 생성
      */
-    @PostMapping("users/{userId}/feeds")
+    @PostMapping("/users/{userId}/feeds")
     public ResponseEntity<CreateFeedResponse> handlerCreateFeed(
             @PathVariable Long userId,
             @Valid @RequestBody CreateFeedRequest request
     ) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(feedService.createFeed(userId, request));
+        return ResponseEntity.ok(feedService.createFeed(userId, request));
     }
 
 

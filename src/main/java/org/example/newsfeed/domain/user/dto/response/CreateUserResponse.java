@@ -1,9 +1,5 @@
-package org.example.newsfeed.domain.user.dto;
+package org.example.newsfeed.domain.user.dto.response;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.Getter;
 
 @Getter
