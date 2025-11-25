@@ -1,5 +1,6 @@
 package org.example.newsfeed.domain.user.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.newsfeed.common.auth.JwtToken;
 import org.example.newsfeed.common.auth.LoginDto;
@@ -24,7 +25,7 @@ public class UserController {
 
     // 사용자 생성
     @PostMapping
-    public ResponseEntity<CreateUserResponse> handlerCreateUser(@RequestBody CreateUserRequest request) {
+    public ResponseEntity<CreateUserResponse> handlerCreateUser(@Valid @RequestBody CreateUserRequest request) {
         CreateUserResponse createdUser = userService.createUser(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }

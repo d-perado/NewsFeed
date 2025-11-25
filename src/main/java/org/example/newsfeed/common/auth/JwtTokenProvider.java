@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider {
     private final Key key;
 
-    // application.yml에서 secret 값 가져와서 key에 저장
+    // application.properties에서 secret 값 가져와서 key에 저장
     public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
@@ -74,7 +74,7 @@ public class JwtTokenProvider {
 
         // UserDetails 객체를 만들어서 Authentication return
         // UserDetails: interface, User: UserDetails를 구현한 class
-        UserDetails principal = new User(claims.getSubject(), "", authorities);
+        UserDetails principal = new User(claims.getSubject(), "N/A", authorities);
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 

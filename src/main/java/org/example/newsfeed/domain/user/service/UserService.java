@@ -53,6 +53,7 @@ public class UserService {
     // 사용자 단건조회
     @Transactional(readOnly = true)
     public GetOneUserResponse getUser(Long userId) {
+
         User findedUser = userRepository.findById(userId).orElseThrow(
                 () -> new IllegalStateException("존재하지 않는 유저입니다.")
         );
