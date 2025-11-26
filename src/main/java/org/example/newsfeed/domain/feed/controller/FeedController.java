@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 //10개씩 페이지네이션하여, 각 페이지 당 뉴스피드 데이터가 10개씩 나오게 합니다.
 
 
-
 @RestController
 @RequiredArgsConstructor
 public class FeedController {
@@ -40,7 +39,9 @@ public class FeedController {
     ) {
         String userEmail = user.getUsername();
 
-        return ResponseEntity.ok(feedService.createFeed(request, userEmail));
+        CreateFeedResponse result = feedService.createFeed(request, userEmail);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
 
@@ -55,7 +56,6 @@ public class FeedController {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         return ResponseEntity.status(HttpStatus.OK).body(feedService.getFeeds(pageable));
     }
-
 
     /**
      * 피드 단건 조회
@@ -103,9 +103,9 @@ public class FeedController {
             @RequestBody GetPeriodsFeedRequest request,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page,size);
+        Pageable pageable = PageRequest.of(page, size);
 
-        Page<GetFeedResponse> result = feedService.getPeriodFeeds(request.getStartDate(),request.getLastDate(),pageable);
+        Page<GetFeedResponse> result = feedService.getPeriodFeeds(request.getStartDate(), request.getLastDate(), pageable);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
