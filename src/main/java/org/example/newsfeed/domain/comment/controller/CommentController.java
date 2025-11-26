@@ -1,7 +1,9 @@
 package org.example.newsfeed.domain.comment.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.connector.Response;
 import org.example.newsfeed.domain.comment.dto.request.CreateCommentRequest;
+import org.example.newsfeed.domain.comment.dto.response.CommentLikeResponse;
 import org.example.newsfeed.domain.comment.dto.response.CreateCommentResponse;
 import org.example.newsfeed.domain.comment.dto.request.UpdateCommentRequest;
 import org.example.newsfeed.domain.comment.dto.response.GetCommentPageResponse;
@@ -13,6 +15,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,13 +27,15 @@ public class CommentController {
     private final CommentService commentService;
 
     // 생성
-    @PostMapping("/users/{userId}/feeds/{feedId}/comments")
+    @PostMapping("/feeds/{feedId}/comments")
     public ResponseEntity<CreateCommentResponse> handlerCreateComment(
             @PathVariable("feedId") Long feedId,
-            @PathVariable("userId") Long userId,
-            @RequestBody CreateCommentRequest request
+            @RequestBody CreateCommentRequest request,
+            @AuthenticationPrincipal UserDetails user
     ) {
-       return ResponseEntity.status(HttpStatus.CREATED).body(commentService.save(feedId, userId,request));
+        String userEmail = user.getUsername();
+
+       return ResponseEntity.status(HttpStatus.CREATED).body(commentService.save(feedId, request, userEmail));
     }
 
 
@@ -49,17 +56,39 @@ public class CommentController {
     @PatchMapping("/comments/{commentId}")
     public ResponseEntity<UpdateCommentResponse> handlerUpdateComment(
             @PathVariable Long commentId,
-            @RequestBody UpdateCommentRequest request
+            @RequestBody UpdateCommentRequest request,
+            @AuthenticationPrincipal UserDetails user
     ) {
-        return ResponseEntity.status(HttpStatus.OK).body(commentService.update(commentId,request));
+        String userEmail = user.getUsername();
+
+        return ResponseEntity.status(HttpStatus.OK).body(commentService.update(commentId, request, userEmail));
     }
+
+
 
     // 삭제
     @DeleteMapping("/comments/{commentId}")
     public ResponseEntity<Void> handlerDeleteComment(
-            @PathVariable Long commentId
+            @PathVariable Long commentId,
+            @AuthenticationPrincipal UserDetails user
     ) {
-        commentService.delete(commentId);
+        String userEmail = user.getUsername();
+
+        commentService.delete(commentId, userEmail);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    // Like 좋아요 b
+    @PostMapping("/comments/{commentId}/likes")
+    public ResponseEntity<CommentLikeResponse> handlerLikeComment(
+            @PathVariable("commentId") Long commentId,
+            // Authentication 객체에서 사용자 이름(ID)을 안전하게 추출
+            Authentication authentication
+    ) {
+        // 주로 User 엔티티의 username/email을 반환합니다.
+        CommentLikeResponse likeResponse = commentService.toggleLike(commentId, authentication.getName());
+
+        return ResponseEntity.ok(likeResponse);
+    }
 }
+

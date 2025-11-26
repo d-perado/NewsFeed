@@ -24,6 +24,9 @@ public class Comment {
     @Column
     private String content;
 
+    @Column(nullable = false)
+    private Long likeCount = 0L;
+
     @CreatedDate
     @Column(updatable = false) // 생성 시간은 수정되지 않도록 설정
     private LocalDateTime createdAt;
@@ -48,6 +51,16 @@ public class Comment {
 
     public void modify(UpdateCommentRequest request) {
         this.content = request.getContent() != null ? request.getContent() : this.content;
+    }
+
+    public void increaseLikes() {
+        this.likeCount++;
+    }
+
+    public void decreaseLikes() {
+        if(this.likeCount > 0) {
+            this.likeCount--;
+        }
     }
 
 }
