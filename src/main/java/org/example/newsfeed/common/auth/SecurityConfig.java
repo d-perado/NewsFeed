@@ -31,10 +31,12 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // URL 주소별 접근 권한 설정
                 .authorizeHttpRequests(auth -> auth
-                                // 로그인 API는 누구나 접근 가능
-                                .requestMatchers("/users", "/users/login").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/users/*").permitAll()
-                                .anyRequest().authenticated()
+                        // 로그인 API는 누구나 접근 가능
+                        .requestMatchers("/users", "/users/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/feeds").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/feeds/*").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .build();
