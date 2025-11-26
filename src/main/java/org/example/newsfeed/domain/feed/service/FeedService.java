@@ -8,16 +8,16 @@ import org.example.newsfeed.common.exception.ErrorMessage;
 import org.example.newsfeed.domain.feed.dto.FeedDTO;
 import org.example.newsfeed.domain.feed.dto.request.CreateFeedRequest;
 import org.example.newsfeed.domain.feed.dto.request.UpdateFeedRequest;
-import org.example.newsfeed.domain.feed.dto.response.CreateFeedResponse;
-import org.example.newsfeed.domain.feed.dto.response.GetFeedPageResponse;
-import org.example.newsfeed.domain.feed.dto.response.GetFeedResponse;
-import org.example.newsfeed.domain.feed.dto.response.UpdateFeedResponse;
+import org.example.newsfeed.domain.feed.dto.response.*;
 import org.example.newsfeed.domain.feed.repository.FeedRepository;
 import org.example.newsfeed.domain.user.repository.UserRepository;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @Service
 @Transactional
@@ -100,5 +100,12 @@ public class FeedService {
         );
 
         feedRepository.delete(feed);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<GetFeedResponse> getPeriodFeeds(LocalDateTime startDate, LocalDateTime lastDate, Pageable pageable){
+        Page<Feed> feeds = feedRepository.findAllsByCreatedAtBetween(startDate,lastDate,pageable);
+
+        return feeds.map(FeedDTO::from).map(GetFeedResponse::from);
     }
 }

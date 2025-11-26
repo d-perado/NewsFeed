@@ -12,10 +12,8 @@ public class CreateUserResponse {
     private final Long id;
     private final String nickname;
     private final String email;
-    private final String password;
     private final String introduction;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
-
 
 }
