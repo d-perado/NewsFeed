@@ -1,7 +1,6 @@
 package org.example.newsfeed.domain.comment.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.connector.Response;
 import org.example.newsfeed.domain.comment.dto.request.CreateCommentRequest;
 import org.example.newsfeed.domain.comment.dto.response.CommentLikeResponse;
 import org.example.newsfeed.domain.comment.dto.response.CreateCommentResponse;
@@ -35,7 +34,7 @@ public class CommentController {
     ) {
         String userEmail = user.getUsername();
 
-       return ResponseEntity.status(HttpStatus.CREATED).body(commentService.save(feedId, request, userEmail));
+        return ResponseEntity.status(HttpStatus.CREATED).body(commentService.save(feedId, request, userEmail));
     }
 
 
@@ -63,7 +62,6 @@ public class CommentController {
 
         return ResponseEntity.status(HttpStatus.OK).body(commentService.update(commentId, request, userEmail));
     }
-
 
 
     // 삭제
