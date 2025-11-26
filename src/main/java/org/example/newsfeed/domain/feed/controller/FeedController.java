@@ -110,4 +110,13 @@ public class FeedController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @GetMapping("/users/me/feeds")
+    public ResponseEntity<Page<GetFeedPageResponse>> handlerGetFollowPriorityFeeds(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<GetFeedPageResponse> result = feedService.getFeedsByFollowPriority(pageable);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
 }
