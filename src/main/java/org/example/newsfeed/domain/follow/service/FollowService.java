@@ -25,7 +25,7 @@ public class FollowService {
 
     @Transactional
     public CreateFollowResponse createFollow(UserDetails user, Long followingUserId) {
-        User findUser = userRepository.findByEmail(user.getUsername()).orElseThrow(()-> new IllegalStateException("존재하지 않는 유저입니다."));
+        User findUser = userRepository.findByEmail(user.getUsername()).orElseThrow(()-> new CustomException(ErrorMessage.NOT_FOUND_USER));
 
         if(findUser.getId().equals(followingUserId)) {
             throw new CustomException(ErrorMessage.CANNOT_FOLLOW_SELF);
@@ -49,7 +49,7 @@ public class FollowService {
 
     @Transactional
     public void deleteFollow(UserDetails user, Long followingUserId) {
-        User findUser = userRepository.findByEmail(user.getUsername()).orElseThrow(()-> new IllegalStateException("존재하지 않는 유저입니다."));
+        User findUser = userRepository.findByEmail(user.getUsername()).orElseThrow(()-> new CustomException(ErrorMessage.NOT_FOUND_USER));
 
         boolean existence = followRepository.existsByTo_IdAndFrom_Id(findUser.getId(), followingUserId);
         if (!existence) {
@@ -60,7 +60,7 @@ public class FollowService {
 
     @Transactional(readOnly = true)
     public Page<UserDTO> getAllFollowing(UserDetails user, int page, int size) {
-        User findUser = userRepository.findByEmail(user.getUsername()).orElseThrow(()-> new IllegalStateException("존재하지 않는 유저입니다."));
+        User findUser = userRepository.findByEmail(user.getUsername()).orElseThrow(()-> new CustomException(ErrorMessage.NOT_FOUND_USER));
 
         Pageable pageable = Pageable.ofSize(size).withPage(page);
         Page<User> following = followRepository.findFollowersByTo_Id(findUser.getId(), pageable);
@@ -70,7 +70,7 @@ public class FollowService {
 
     @Transactional(readOnly = true)
     public Page<UserDTO> getAllFollower(UserDetails user, int page, int size) {
-        User findUser = userRepository.findByEmail(user.getUsername()).orElseThrow(()-> new IllegalStateException("존재하지 않는 유저입니다."));
+        User findUser = userRepository.findByEmail(user.getUsername()).orElseThrow(()-> new CustomException(ErrorMessage.NOT_FOUND_USER));
 
         Pageable pageable = Pageable.ofSize(size).withPage(page);
         Page<User> followers = followRepository.findFollowingsByFrom_Id(findUser.getId(), pageable);

@@ -2,6 +2,8 @@ package org.example.newsfeed.domain.comment.service;
 
 import org.example.newsfeed.common.entity.CommentLike;
 import org.example.newsfeed.common.entity.User;
+import org.example.newsfeed.common.exception.CustomException;
+import org.example.newsfeed.common.exception.ErrorMessage;
 import org.example.newsfeed.domain.comment.dto.CommentDTO;
 import org.example.newsfeed.domain.comment.dto.request.CreateCommentRequest;
 import org.example.newsfeed.domain.comment.dto.request.UpdateCommentRequest;
@@ -37,11 +39,11 @@ public class CommentService {
     // 생성
     public CreateCommentResponse save(Long feedId, CreateCommentRequest request, String email) {
         Feed feed = feedRepository.findById(feedId).orElseThrow(
-                () -> new IllegalStateException("없는 피드입니다.")
+                () -> new CustomException(ErrorMessage.NOT_FOUND_FEED)
         );
 
         User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new IllegalStateException("없는 유저입니다.")
+                () -> new CustomException(ErrorMessage.NOT_FOUND_USER)
         );
 
         Comment comment = new Comment(
@@ -68,13 +70,13 @@ public class CommentService {
     // 댓글 수정
     public UpdateCommentResponse update(Long commentId, UpdateCommentRequest request, String email) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(
-                () -> new IllegalStateException("없는 댓글입니다.")
+                () -> new CustomException(ErrorMessage.NOT_FOUND_COMMENT)
         );
 
         boolean emailEquals = comment.getUser().getEmail().equals(email);
 
         if(!emailEquals) {
-            throw new IllegalStateException("이메일이 다릅니다.");
+            throw new CustomException(ErrorMessage.EMAIL_NOT_MATCH);
         }
 
         comment.modify(request);
@@ -88,13 +90,13 @@ public class CommentService {
     public void delete(Long commentId, String email) {
 
         Comment comment = commentRepository.findById(commentId).orElseThrow(
-                () -> new IllegalStateException("없는 댓글입니다.")
+                () -> new CustomException(ErrorMessage.NOT_FOUND_COMMENT)
         );
 
         boolean emailEquals = comment.getUser().getEmail().equals(email);
 
         if(!emailEquals) {
-            throw new IllegalStateException("이메일이 다릅니다.");
+            throw new CustomException(ErrorMessage.EMAIL_NOT_MATCH);
         }
 
         commentRepository.deleteById(commentId);
@@ -105,10 +107,10 @@ public class CommentService {
 
         // 1. User와 Comment 엔티티 조회
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalStateException("사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new CustomException(ErrorMessage.NOT_FOUND_USER));
 
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalStateException("댓글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new CustomException(ErrorMessage.NOT_FOUND_COMMENT));
 
         // 2. 좋아요 기록 확인
         Optional<CommentLike> existingLike = commentLikeRepository.findByUserAndComment(user, comment);
