@@ -85,9 +85,9 @@ public class FeedController {
             @Valid @RequestBody UpdateFeedRequest request,
             @AuthenticationPrincipal UserDetails user
     ) {
-        String userEamil = user.getUsername();
+        String userEmail = user.getUsername();
 
-        return ResponseEntity.status(HttpStatus.OK).body(feedService.updateFeed(feedId, request, userEamil));
+        return ResponseEntity.status(HttpStatus.OK).body(feedService.updateFeed(feedId, request, userEmail));
     }
 
 
@@ -99,9 +99,9 @@ public class FeedController {
             @PathVariable Long feedId,
             @AuthenticationPrincipal UserDetails user
     ) {
-        String userEamil = user.getUsername();
+        String userEmail = user.getUsername();
 
-        feedService.delete(feedId, userEamil);
+        feedService.delete(feedId, userEmail);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
