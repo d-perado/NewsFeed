@@ -67,7 +67,6 @@ public class DummyDataLoader implements CommandLineRunner {
             User user = users.get(random.nextInt(users.size()));
             Comment comment = new Comment("댓글 " + i + "입니다.", feed, user);
             LocalDateTime date = feed.getCreatedAt().plusHours(random.nextInt(24));
-            setAuditFieldsComment(comment, date);
             commentRepository.save(comment);
         }
 
@@ -98,17 +97,4 @@ public class DummyDataLoader implements CommandLineRunner {
         }
     }
 
-    private void setAuditFieldsComment(Comment comment, LocalDateTime dateTime) {
-        try {
-            Field createdField = Comment.class.getDeclaredField("createdAt");
-            createdField.setAccessible(true);
-            createdField.set(comment, dateTime);
-
-            Field updatedField = Comment.class.getDeclaredField("updatedAt");
-            updatedField.setAccessible(true);
-            updatedField.set(comment, dateTime);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }
