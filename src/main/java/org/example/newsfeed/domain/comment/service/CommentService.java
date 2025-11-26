@@ -29,12 +29,10 @@ import java.util.Optional;
 @Service
 public class CommentService {
 
-
     private final CommentRepository commentRepository;
     private final FeedRepository feedRepository;
     private final UserRepository userRepository;
     private final CommentLikeRepository commentLikeRepository;
-
 
     // 생성
     public CreateCommentResponse save(Long feedId, CreateCommentRequest request, String email) {
@@ -51,6 +49,7 @@ public class CommentService {
                 feed,
                 user
         );
+
         commentRepository.save(comment);
         CommentDTO dto = CommentDTO.from(comment);
 
@@ -58,11 +57,9 @@ public class CommentService {
 
     }
 
-
     // 전체 조회
     @Transactional(readOnly = true)
     public Page<GetCommentPageResponse> getAll(Pageable pageable) {
-
         Page<Comment> commentPage = commentRepository.findAll(pageable);
 
         return commentPage.map(comment -> GetCommentPageResponse.from(CommentDTO.from(comment)));
