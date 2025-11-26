@@ -1,6 +1,7 @@
 package org.example.newsfeed.domain.feed.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.newsfeed.common.auth.SecurityUtil;
 import org.example.newsfeed.common.entity.Feed;
 import org.example.newsfeed.common.entity.User;
 import org.example.newsfeed.common.exception.CustomException;
@@ -8,16 +9,17 @@ import org.example.newsfeed.common.exception.ErrorMessage;
 import org.example.newsfeed.domain.feed.dto.FeedDTO;
 import org.example.newsfeed.domain.feed.dto.request.CreateFeedRequest;
 import org.example.newsfeed.domain.feed.dto.request.UpdateFeedRequest;
-import org.example.newsfeed.domain.feed.dto.response.CreateFeedResponse;
-import org.example.newsfeed.domain.feed.dto.response.GetFeedPageResponse;
-import org.example.newsfeed.domain.feed.dto.response.GetFeedResponse;
-import org.example.newsfeed.domain.feed.dto.response.UpdateFeedResponse;
+import org.example.newsfeed.domain.feed.dto.response.*;
 import org.example.newsfeed.domain.feed.repository.FeedRepository;
+import org.example.newsfeed.domain.follow.repository.FollowRepository;
 import org.example.newsfeed.domain.user.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Transactional
@@ -27,6 +29,7 @@ public class FeedService {
 
     private final FeedRepository feedRepository;
     private final UserRepository userRepository;
+    private final FollowRepository followRepository;
 
     /**
      * 피드 생성
@@ -53,7 +56,6 @@ public class FeedService {
         Page<Feed> feedList = feedRepository.findAll(pageable);
         return feedList.map(feed -> GetFeedPageResponse.from(FeedDTO.from(feed)));
     }
-
 
     /**
      * 피드 단건 조회
@@ -119,5 +121,35 @@ public class FeedService {
 
         // 작성자가 같다면 해당 피드 삭제
         feedRepository.delete(feed);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<GetFeedResponse> getPeriodFeeds(LocalDateTime startDate, LocalDateTime lastDate, Pageable pageable) {
+        Page<Feed> feeds = feedRepository.findAllsByCreatedAtBetween(startDate, lastDate, pageable);
+
+        return feeds.map(FeedDTO::from).map(GetFeedResponse::from);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<GetFeedPageResponse> getFeedsByFollowPriority(Pageable pageable) {
+
+        // 로그인한 유저 email 조회
+        String email = SecurityUtil.getLoginUserEmail();
+        System.out.println("email: " + email);
+        // email로 로그인한 user 찾기
+        User loginUser = userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorMessage.NOT_FOUND_USER));
+
+        // 내가 팔로우한 사람 ID 목록
+        List<Long> followingIds = followRepository
+                .findAllByTo_Id(loginUser.getId())
+                .stream()
+                .map(f -> f.getTo().getId())
+                .toList();
+
+        // QueryDSL로 "팔로우한 사람 우선 + 최신순" 조회
+        Page<Feed> feeds = feedRepository.findByFollowPriority(loginUser.getId(), followingIds, pageable);
+
+        return feeds.map(feed -> GetFeedPageResponse.from(FeedDTO.from(feed)));
     }
 }

@@ -1,29 +1,7 @@
 package org.example.newsfeed.domain.feed.dto;
 
-
-//@Getter
-//@NoArgsConstructor
-//@AllArgsConstructor
-//public class UserDto {
-//
-//    private Long id;
-//    private String username;
-//    private String email;
-//    private String password;
-//    private LocalDateTime createdAt;
-//    private LocalDateTime modifiedAt;
-//
-//    public static UserDto from(User user) {
-//        return new UserDto(user.getId(), user.getUsername(), user.getEmail(), user.getPassword(), user.getCreatedAt(),
-//                user.getModifiedAt());
-//    }
-//
-//}
-
-
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.example.newsfeed.common.entity.Feed;
 import org.example.newsfeed.domain.user.dto.UserDTO;
 
@@ -31,15 +9,15 @@ import java.time.LocalDateTime;
 
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class FeedDTO {
 
-    private Long id;
-    private UserDTO writer;
-    private String content;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private final Long id;
+    private final UserDTO writer;
+    private final String content;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
+
 
     public static FeedDTO from(Feed feed) {
         return new FeedDTO(feed.getId(),
