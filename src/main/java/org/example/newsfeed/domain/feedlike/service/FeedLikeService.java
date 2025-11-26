@@ -55,16 +55,24 @@ public class FeedLikeService {
 
             // 좋아요 저장
             feedLikeRepository.save(feedLike);
+
+            // 좋아요 카운트 증가
+            feed.increaseLike();
+
+            System.out.println("Asdf");
         } else {
             // 4-2. 이미 좋아요를 눌렀다면
             throw new IllegalStateException("같은 게시물에는 사용자당 한 번만 좋아요가 가능합니다.");
         }
 
-        // 5. FeedLikeDTO 반환
+        // 5. 현재 좋아요 수 반환
+        Long currentLikeCount = feedLikeRepository.countByFeed(feed);
+
+        // 6. FeedLikeDTO 반환
         FeedLike feedLike = feedLikeRepository.findByFeedAndUser(feed, user).get();
         FeedLikeDTO dto = FeedLikeDTO.from(feedLike);
 
-        return LikeFeedResponse.from(dto);
+        return LikeFeedResponse.from(dto, currentLikeCount);
 
     }
 }

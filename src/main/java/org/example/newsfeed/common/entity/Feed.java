@@ -23,6 +23,9 @@ public class Feed extends TimeBaseEntity {
     @Column
     private String content;
 
+    @Column
+    private Long likeCount = 0L;
+
     public Feed(User writer, String content) {
         this.writer = writer;
         this.content = content;
@@ -30,5 +33,15 @@ public class Feed extends TimeBaseEntity {
 
     public void modify(UpdateFeedRequest request) {
         this.content = request.getContent() != null ? request.getContent() : this.content;
+    }
+
+    public void increaseLike() {
+        this.likeCount++;
+    }
+
+    public void decreaseLike() {
+        if (likeCount > 0) {
+            this.likeCount--;
+        }
     }
 }

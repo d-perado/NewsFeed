@@ -11,12 +11,14 @@ public class LikeFeedResponse {
     private final Long userId;
     private final String nickname;
     private final Long feedId;
+    private final Long likeCount;
 
-    public static LikeFeedResponse from(FeedLikeDTO feedLikeDTO) {
+    public static LikeFeedResponse from(FeedLikeDTO feedLikeDTO, Long likeCount) {
         return new LikeFeedResponse(
                 feedLikeDTO.getId(),
                 feedLikeDTO.getUser().getNickname(),
-                feedLikeDTO.getFeed().getId()
+                feedLikeDTO.getFeed().getId(),
+                likeCount
         );
     }
 }
