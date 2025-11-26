@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class FeedService {
 
-
     private final FeedRepository feedRepository;
     private final UserRepository userRepository;
 
