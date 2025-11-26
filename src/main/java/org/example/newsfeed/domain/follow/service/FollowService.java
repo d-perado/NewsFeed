@@ -59,7 +59,7 @@ public class FollowService {
     }
 
     @Transactional(readOnly = true)
-    public Page<UserDTO> getAllFollowers(UserDetails user, int page, int size) {
+    public Page<UserDTO> getAllFollowing(UserDetails user, int page, int size) {
         User findUser = userRepository.findByEmail(user.getUsername()).orElseThrow(()-> new IllegalStateException("존재하지 않는 유저입니다."));
 
         Pageable pageable = Pageable.ofSize(size).withPage(page);
@@ -70,7 +70,7 @@ public class FollowService {
     }
 
     @Transactional(readOnly = true)
-    public Page<UserDTO> getAllFollowings(UserDetails user, int page, int size) {
+    public Page<UserDTO> getAllFollower(UserDetails user, int page, int size) {
         User findUser = userRepository.findByEmail(user.getUsername()).orElseThrow(()-> new IllegalStateException("존재하지 않는 유저입니다."));
 
         Pageable pageable = Pageable.ofSize(size).withPage(page);

@@ -38,7 +38,7 @@ public class FollowController {
                                                                 @RequestParam(defaultValue = "0") int page,
                                                                 @RequestParam(defaultValue = "10") int size) {
 
-        Page<UserDTO> result = followService.getAllFollowers(user, page, size);
+        Page<UserDTO> result = followService.getAllFollowing(user, page, size);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
@@ -48,7 +48,7 @@ public class FollowController {
                                                                  @RequestParam(defaultValue = "0") int page,
                                                                  @RequestParam(defaultValue = "10") int size) {
 
-        Page<UserDTO> result = followService.getAllFollowings(user, page, size);
+        Page<UserDTO> result = followService.getAllFollower(user, page, size);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
