@@ -37,7 +37,7 @@ public class FeedService {
 
         // 해당 email의 유저가 있는지 확인
         User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new IllegalStateException("해당 이메일의 유저가 없습니다.")
+                () -> new CustomException(ErrorMessage.NOT_FOUND_USER)
         );
 
         Feed feed = new Feed(user, request.getContent());
@@ -87,7 +87,7 @@ public class FeedService {
 
         // 작성자가 다르다면 예외 처리
         if (!emailEquals) {
-            throw new IllegalStateException("이메일이 다릅니다.");
+            throw new CustomException(ErrorMessage.EMAIL_NOT_MATCH);
         }
 
         // 작성자가 같다면 해당 피드 수정
@@ -115,7 +115,7 @@ public class FeedService {
 
         // 작성자가 다르다면 예외 처리
         if (!emailEquals) {
-            throw new IllegalStateException("이메일이 다릅니다.");
+            throw new CustomException(ErrorMessage.EMAIL_NOT_MATCH);
         }
 
         // 작성자가 같다면 해당 피드 삭제

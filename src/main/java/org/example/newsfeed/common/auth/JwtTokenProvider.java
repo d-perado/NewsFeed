@@ -3,6 +3,8 @@ package org.example.newsfeed.common.auth;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.example.newsfeed.common.exception.CustomException;
+import org.example.newsfeed.common.exception.ErrorMessage;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.User;
@@ -64,7 +66,7 @@ public class JwtTokenProvider {
         Claims claims = parseClaims(accessToken);
 
         if (claims.get("auth") == null) {
-            throw new IllegalStateException("권한 정보가 없는 토큰입니다.");
+            throw new CustomException(ErrorMessage.TOKEN_AUTHORITY_MISSING);
         }
 
         // 클레임에서 권한 정보 가져오기
@@ -112,15 +114,4 @@ public class JwtTokenProvider {
         }
     }
 
-    // 남은 만료시간 계산
-    public long getExpiration(String token) {
-        Date expiration = Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getExpiration();
-        long now = new Date().getTime();
-        return expiration.getTime() - now;
-    }
 }

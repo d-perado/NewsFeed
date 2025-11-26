@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.newsfeed.common.entity.User;
 import org.example.newsfeed.common.auth.JwtToken;
 import org.example.newsfeed.common.auth.JwtTokenProvider;
+import org.example.newsfeed.common.exception.CustomException;
+import org.example.newsfeed.common.exception.ErrorMessage;
 import org.example.newsfeed.domain.user.dto.request.CreateUserRequest;
 import org.example.newsfeed.domain.user.dto.request.DeleteUserRequest;
 import org.example.newsfeed.domain.user.dto.request.UpdateUserRequest;
@@ -50,10 +52,10 @@ public class UserService {
     @Transactional(readOnly = true)
     public GetUserResponse getUser(Long userId) {
         User findedUser = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalStateException("존재하지 않는 유저입니다.")
+                () -> new CustomException(ErrorMessage.NOT_FOUND_USER)
         );
         if (findedUser.isDeleted()) {
-            throw new IllegalStateException("존재하지 않는 유저입니다.");
+            throw new CustomException(ErrorMessage.NOT_FOUND_USER);
         }
 
         return new GetUserResponse(
@@ -83,10 +85,10 @@ public class UserService {
     @Transactional
     public UpdateUserResponse updateUser(Long userId, UpdateUserRequest request) {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalStateException("존재하지 않는 유저입니다.")
+                () -> new CustomException(ErrorMessage.NOT_FOUND_USER)
         );
         if (user.isDeleted()) {
-            throw new IllegalStateException("존재하지 않는 유저입니다.");
+            throw new CustomException(ErrorMessage.NOT_FOUND_USER);
         }
 
         user.modify(
@@ -108,13 +110,13 @@ public class UserService {
     public void deleteUser(Long userId, DeleteUserRequest request) {
         // 1-1. 사용자 아이디가 존재하지 않을때 예외처리
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 유저입니다."));
+                () -> new CustomException(ErrorMessage.NOT_FOUND_USER));
         // 1-2. 사용자 아이디와 비밀번호가 일치하지 않는 경우
         if (!user.getEmail().equals(request.getEmail())) {
-            throw new IllegalArgumentException("이메일이 일치하지 않습니다.");
+            throw new CustomException(ErrorMessage.EMAIL_NOT_MATCH);
         }
         if (!user.getPassword().equals(request.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw new CustomException(ErrorMessage.PASSWORD_NOT_MATCH);
         }
         // 1-3. 사용자 아이디가 존재할때 삭제처리
         userRepository.deleteById(userId);
