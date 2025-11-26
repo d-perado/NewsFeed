@@ -1,7 +1,6 @@
 package org.example.newsfeed.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.example.newsfeed.common.entity.User;
 import org.example.newsfeed.common.auth.JwtToken;
 import org.example.newsfeed.common.auth.JwtTokenProvider;
@@ -15,6 +14,7 @@ import org.example.newsfeed.domain.user.repository.UserRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +23,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 @Transactional
 public class UserService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -37,14 +36,7 @@ public class UserService {
         User user= new User(request.getNickname(), request.getEmail(),passwordEncoder.encode(request.getPassword()), request.getIntroduction());
         User savedUser = userRepository.save(user);
 
-        return new CreateUserResponse(
-                savedUser.getId(),
-                savedUser.getNickname(),
-                savedUser.getEmail(),
-                savedUser.getIntroduction(),
-                savedUser.getCreatedAt(),
-                savedUser.getUpdatedAt()
-        );
+        return CreateUserResponse.from(savedUser);
     }
     // 사용자 단건조회
     @Transactional(readOnly = true)
@@ -56,68 +48,63 @@ public class UserService {
             throw new IllegalStateException("존재하지 않는 유저입니다.");
         }
 
-        return new GetUserResponse(
-                findedUser.getId(),
-                findedUser.getNickname(),
-                findedUser.getEmail(),
-                findedUser.getIntroduction(),
-                findedUser.getCreatedAt(),
-                findedUser.getUpdatedAt()
-        );
+        return GetUserResponse.from(findedUser);
     }
+
+    //사용자 자기자신 조회
+    public GetUserResponse getUserSelf(UserDetails user) {
+        User findUser = userRepository.findByEmail(user.getUsername()).orElseThrow(()->new IllegalStateException("존재하지 않는유저 입니다."));
+
+        return GetUserResponse.from(findUser);
+    }
+
     // 사용자 전체조회
     @Transactional(readOnly = true)
     public List<GetUserResponse> getAllUsers() {
         List<User> allUser = userRepository.getNonDeletedAllUser();
-        return allUser.stream().map((x) -> new GetUserResponse(
-                x.getId(),
-                x.getNickname(),
-                x.getEmail(),
-                x.getIntroduction(),
-                x.getCreatedAt(),
-                x.getUpdatedAt()
-        )).toList();
+        return allUser.stream().map(GetUserResponse::from).toList();
 
     }
     // 사용자 수정
     @Transactional
-    public UpdateUserResponse updateUser(Long userId, UpdateUserRequest request) {
-        User user = userRepository.findById(userId).orElseThrow(
+    public UpdateUserResponse updateUser(UserDetails user, UpdateUserRequest request) {
+
+        User findUser = userRepository.findByEmail(user.getUsername()).orElseThrow(
                 () -> new IllegalStateException("존재하지 않는 유저입니다.")
         );
-        if (user.isDeleted()) {
+        if (findUser.isDeleted()) {
             throw new IllegalStateException("존재하지 않는 유저입니다.");
         }
 
-        user.modify(
+        if (!passwordEncoder.matches(request.getPassword(), findUser.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        findUser.modify(
                 request.getEmail(),
                 request.getPassword(),
                 request.getIntroduction()
         );
-        return new UpdateUserResponse(
-                user.getId(),
-                user.getNickname(),
-                user.getEmail(),
-                user.getIntroduction(),
-                user.getCreatedAt(),
-                user.getUpdatedAt()
-        );
+
+        return UpdateUserResponse.from(findUser);
     }
+
     // 사용자 삭제
     @Transactional
-    public void deleteUser(Long userId, DeleteUserRequest request) {
+    public void deleteUser(UserDetails user, DeleteUserRequest request) {
         // 1-1. 사용자 아이디가 존재하지 않을때 예외처리
-        User user = userRepository.findById(userId).orElseThrow(
+        User findUser = userRepository.findByEmail(user.getUsername()).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 유저입니다."));
+
         // 1-2. 사용자 아이디와 비밀번호가 일치하지 않는 경우
-        if (!user.getEmail().equals(request.getEmail())) {
+        if (!findUser.getEmail().equals(request.getEmail())) {
             throw new IllegalArgumentException("이메일이 일치하지 않습니다.");
         }
-        if (!user.getPassword().equals(request.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), findUser.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
         // 1-3. 사용자 아이디가 존재할때 삭제처리
-        userRepository.deleteById(userId);
+        userRepository.deleteById(findUser.getId());
     }
 
     public JwtToken login(String email, String password) {

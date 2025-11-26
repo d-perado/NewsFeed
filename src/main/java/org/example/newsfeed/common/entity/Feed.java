@@ -6,7 +6,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.newsfeed.domain.feed.dto.request.UpdateFeedRequest;
-import org.example.newsfeed.domain.feed.dto.response.UpdateFeedResponse;
 
 @Entity
 @Table(name = "feeds")
