@@ -14,6 +14,7 @@ public class GetFeedResponse {
     private final Long id;
     private final String nickname;
     private final String content;
+    private final Long likeCount;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
@@ -22,6 +23,7 @@ public class GetFeedResponse {
                 dto.getId(),
                 dto.getWriter().getNickname(),
                 dto.getContent(),
+                dto.getLikeCount(),
                 dto.getCreatedAt(),
                 dto.getUpdatedAt()
         );

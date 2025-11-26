@@ -11,6 +11,7 @@ import org.example.newsfeed.domain.feed.dto.request.CreateFeedRequest;
 import org.example.newsfeed.domain.feed.dto.request.UpdateFeedRequest;
 import org.example.newsfeed.domain.feed.dto.response.*;
 import org.example.newsfeed.domain.feed.repository.FeedRepository;
+import org.example.newsfeed.domain.feedlike.repository.FeedLikeRepository;
 import org.example.newsfeed.domain.follow.repository.FollowRepository;
 import org.example.newsfeed.domain.user.repository.UserRepository;
 import org.springframework.data.domain.Page;
@@ -26,9 +27,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FeedService {
 
+
     private final FeedRepository feedRepository;
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
+    private final FeedLikeRepository feedLikeRepository;
 
     /**
      * 피드 생성
@@ -53,6 +56,7 @@ public class FeedService {
     @Transactional(readOnly = true)
     public Page<GetFeedPageResponse> getFeeds(Pageable pageable) {
         Page<Feed> feedList = feedRepository.findAll(pageable);
+
         return feedList.map(feed -> GetFeedPageResponse.from(FeedDTO.from(feed)));
     }
 
@@ -125,7 +129,6 @@ public class FeedService {
     @Transactional(readOnly = true)
     public Page<GetFeedResponse> getPeriodFeeds(LocalDateTime startDate, LocalDateTime lastDate, Pageable pageable) {
         Page<Feed> feeds = feedRepository.findAllsByCreatedAtBetween(startDate, lastDate, pageable);
-
         return feeds.map(FeedDTO::from).map(GetFeedResponse::from);
     }
 
