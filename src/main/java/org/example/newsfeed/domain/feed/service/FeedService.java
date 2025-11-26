@@ -141,9 +141,9 @@ public class FeedService {
 
         // 내가 팔로우한 사람 ID 목록
         List<Long> followingIds = followRepository
-                .findAllByFollowingUser_Id(loginUser.getId())
+                .findAllByTo_Id(loginUser.getId())
                 .stream()
-                .map(f -> f.getFollowedUser().getId())
+                .map(f -> f.getTo().getId())
                 .toList();
 
         // QueryDSL로 "팔로우한 사람 우선 + 최신순" 조회
