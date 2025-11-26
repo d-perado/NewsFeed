@@ -23,7 +23,7 @@ public class User extends TimeBaseEntity implements UserDetails {
     private Long id;
     @Column(unique = true)
     private String nickname;
-    @Column
+    @Column(unique = true)
     private String email;
     @Column
     private String password;
