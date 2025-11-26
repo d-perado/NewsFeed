@@ -5,13 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.newsfeed.common.entity.User;
 import org.example.newsfeed.common.auth.JwtToken;
 import org.example.newsfeed.common.auth.JwtTokenProvider;
-import org.example.newsfeed.domain.user.dto.UserDTO;
 import org.example.newsfeed.domain.user.dto.request.CreateUserRequest;
 import org.example.newsfeed.domain.user.dto.request.DeleteUserRequest;
 import org.example.newsfeed.domain.user.dto.request.UpdateUserRequest;
 import org.example.newsfeed.domain.user.dto.response.CreateUserResponse;
-import org.example.newsfeed.domain.user.dto.response.GetAllUserResponse;
-import org.example.newsfeed.domain.user.dto.response.GetOneUserResponse;
+import org.example.newsfeed.domain.user.dto.response.GetUserResponse;
 import org.example.newsfeed.domain.user.dto.response.UpdateUserResponse;
 import org.example.newsfeed.domain.user.repository.UserRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,7 +18,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -43,7 +40,6 @@ public class UserService {
                 savedUser.getId(),
                 savedUser.getNickname(),
                 savedUser.getEmail(),
-                savedUser.getPassword(),
                 savedUser.getIntroduction(),
                 savedUser.getCreatedAt(),
                 savedUser.getUpdatedAt()
@@ -51,39 +47,37 @@ public class UserService {
     }
     // 사용자 단건조회
     @Transactional(readOnly = true)
-    public GetOneUserResponse getUser(Long userId) {
+    public GetUserResponse getUser(Long userId) {
         User findedUser = userRepository.findById(userId).orElseThrow(
                 () -> new IllegalStateException("존재하지 않는 유저입니다.")
         );
-        return new GetOneUserResponse(
+        if (findedUser.isDeleted()) {
+            throw new IllegalStateException("존재하지 않는 유저입니다.");
+        }
+
+        return new GetUserResponse(
                 findedUser.getId(),
                 findedUser.getNickname(),
                 findedUser.getEmail(),
-                findedUser.getPassword(),
                 findedUser.getIntroduction(),
                 findedUser.getCreatedAt(),
                 findedUser.getUpdatedAt()
         );
     }
+
+
     // 사용자 전체조회
     @Transactional(readOnly = true)
-    public GetAllUserResponse getAllUsers() {
-        List<User> allUser = new ArrayList<>();
-        allUser = userRepository.findAll();
-        List<UserDTO> userResponseList = new ArrayList<>();
-        for (User user : allUser) {
-            UserDTO userResponse = new UserDTO(
-                    user.getId(),
-                    user.getNickname(),
-                    user.getEmail(),
-                    user.getPassword(),
-                    user.getIntroduction(),
-                    user.getCreatedAt(),
-                    user.getUpdatedAt()
-            );
-            userResponseList.add(userResponse);
-        }
-        return new GetAllUserResponse(userResponseList);
+    public List<GetUserResponse> getAllUsers() {
+        List<User> allUser = userRepository.getNonDeletedAllUser();
+        return allUser.stream().map((x) -> new GetUserResponse(
+                x.getId(),
+                x.getNickname(),
+                x.getEmail(),
+                x.getIntroduction(),
+                x.getCreatedAt(),
+                x.getUpdatedAt()
+        )).toList();
 
     }
     // 사용자 수정
@@ -92,6 +86,10 @@ public class UserService {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new IllegalStateException("존재하지 않는 유저입니다.")
         );
+        if (user.isDeleted()) {
+            throw new IllegalStateException("존재하지 않는 유저입니다.");
+        }
+
         user.modify(
                 request.getEmail(),
                 request.getPassword(),
@@ -101,7 +99,6 @@ public class UserService {
                 user.getId(),
                 user.getNickname(),
                 user.getEmail(),
-                user.getPassword(),
                 user.getIntroduction(),
                 user.getCreatedAt(),
                 user.getUpdatedAt()
@@ -113,7 +110,6 @@ public class UserService {
         // 1-1. 사용자 아이디가 존재하지 않을때 예외처리
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 유저입니다."));
-
         // 1-2. 사용자 아이디와 비밀번호가 일치하지 않는 경우
         if (!user.getEmail().equals(request.getEmail())) {
             throw new IllegalArgumentException("이메일이 일치하지 않습니다.");

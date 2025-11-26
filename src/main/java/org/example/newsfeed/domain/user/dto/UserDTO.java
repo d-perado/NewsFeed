@@ -15,7 +15,6 @@ public class UserDTO {
     private Long id;
     private String nickname;
     private String email;
-    private String password;
     private String introduction;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -24,7 +23,6 @@ public class UserDTO {
         return new UserDTO(user.getId(),
                 user.getNickname(),
                 user.getEmail(),
-                user.getPassword(),
                 user.getIntroduction(),
                 user.getCreatedAt(),
                 user.getUpdatedAt()

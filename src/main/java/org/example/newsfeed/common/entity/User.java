@@ -4,6 +4,7 @@ package org.example.newsfeed.common.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @Table(name = "users")
 @Getter
 @NoArgsConstructor
+@SQLDelete(sql = "UPDATE users SET is_Deleted = true WHERE id=?")
 
 public class User extends TimeBaseEntity implements UserDetails {
     @Id
@@ -26,7 +28,7 @@ public class User extends TimeBaseEntity implements UserDetails {
     @Column
     private String password;
     @Column
-    private boolean isDeleted = false;
+    private boolean isDeleted;
     @Column
     private String introduction;
 
@@ -35,6 +37,7 @@ public class User extends TimeBaseEntity implements UserDetails {
         this.email = email;
         this.password = password;
         this.introduction = introduction;
+        this.isDeleted = false;
     }
 
     public void modify(String email, String password, String introduction) {

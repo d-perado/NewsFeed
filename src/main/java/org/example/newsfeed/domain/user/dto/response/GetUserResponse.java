@@ -7,15 +7,13 @@ import java.time.LocalDateTime;
 
 @Getter
 @RequiredArgsConstructor
-public class GetOneUserResponse {
+public class GetUserResponse {
 
     private final Long id;
     private final String nickname;
     private final String email;
-    private final String password;
     private final String introduction;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
-
 
 }
