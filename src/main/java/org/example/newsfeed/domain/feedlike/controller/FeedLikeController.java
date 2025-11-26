@@ -19,7 +19,7 @@ public class FeedLikeController {
     private final FeedLikeService feedLikeService;
 
     /**
-     * 피드 좋아요
+     * 댓글 좋아요
      */
     @PostMapping("/feeds/{feedId}/likes")
     public ResponseEntity<LikeFeedResponse> handlerCreateFeedLike(
@@ -33,5 +33,18 @@ public class FeedLikeController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-//    @DeleteMapping("/feeds/{}")
+    /**
+     * 피드 좋아요 취소
+     */
+    @DeleteMapping("/feeds/{feedId}/likes")
+    public ResponseEntity<LikeFeedResponse> handlerDeleteFeedLike(
+            @PathVariable Long feedId,
+            @AuthenticationPrincipal UserDetails user
+    ) {
+        String userEmail = user.getUsername();
+
+        LikeFeedResponse result = feedLikeService.unlikeFeed(feedId, userEmail);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
 }

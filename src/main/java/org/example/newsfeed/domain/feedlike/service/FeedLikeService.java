@@ -59,7 +59,6 @@ public class FeedLikeService {
             // 좋아요 카운트 증가
             feed.increaseLike();
 
-            System.out.println("Asdf");
         } else {
             // 4-2. 이미 좋아요를 눌렀다면
             throw new IllegalStateException("같은 게시물에는 사용자당 한 번만 좋아요가 가능합니다.");
@@ -73,6 +72,29 @@ public class FeedLikeService {
         FeedLikeDTO dto = FeedLikeDTO.from(feedLike);
 
         return LikeFeedResponse.from(dto, currentLikeCount);
+
+    }
+
+    public LikeFeedResponse unlikeFeed(Long feedId, String userEmail) {
+        // 1. 해당 피드가 있는지 조회
+        Feed feed = feedRepository.findById(feedId).orElseThrow(
+                () -> new IllegalStateException("해당 피드가 없습니다.")
+        );
+
+        // 2. 해당 유저가 있는지 조회
+        User user = userRepository.findByEmail(userEmail).orElseThrow(
+                () -> new IllegalStateException("해당 이메일의 유저가 없습니다.")
+        );
+
+        // 3. 해당 피드의 유저와 userEmail이 같을 경우 -> 본인이 작성한 게시물과 댓글에 좋아요를 남길 수 없습니다. 예외처리
+//        if (feed.getWriter().getEmail().equals(userEmail)) {
+//            throw new IllegalStateException("본인이 작성 게시물에 좋아요를 취소할 수 없습니다.");
+//        }
+
+        // 3. 본인이 남긴 좋아요 여부 확인
+        feedLikeRepository.findByFeedAndUser(feed, user).orElseThrow(
+                () -> new IllegalStateException()
+        )
 
     }
 }
