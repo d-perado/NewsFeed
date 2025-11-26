@@ -53,7 +53,6 @@ public class FeedService {
         return feedList.map(feed -> GetFeedPageResponse.from(FeedDTO.from(feed)));
     }
 
-
     /**
      * 피드 단건 조회
      */
@@ -121,8 +120,8 @@ public class FeedService {
     }
 
     @Transactional(readOnly = true)
-    public Page<GetFeedResponse> getPeriodFeeds(LocalDateTime startDate, LocalDateTime lastDate, Pageable pageable){
-        Page<Feed> feeds = feedRepository.findAllsByCreatedAtBetween(startDate,lastDate,pageable);
+    public Page<GetFeedResponse> getPeriodFeeds(LocalDateTime startDate, LocalDateTime lastDate, Pageable pageable) {
+        Page<Feed> feeds = feedRepository.findAllsByCreatedAtBetween(startDate, lastDate, pageable);
 
         return feeds.map(FeedDTO::from).map(GetFeedResponse::from);
     }

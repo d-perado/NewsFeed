@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 @Getter
 public class GetPeriodsFeedRequest {
+
     private LocalDateTime startDate;
     private LocalDateTime lastDate;
 }

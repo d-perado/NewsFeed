@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class FeedRepositoryImpl implements FeedRepositoryCustom{
+public class FeedRepositoryImpl implements FeedRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
