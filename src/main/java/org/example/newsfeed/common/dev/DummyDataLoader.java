@@ -1,11 +1,13 @@
 package org.example.newsfeed.common.dev;
 
+import lombok.RequiredArgsConstructor;
 import org.example.newsfeed.common.entity.*;
 import org.example.newsfeed.domain.comment.repository.CommentRepository;
 import org.example.newsfeed.domain.feed.repository.FeedRepository;
 import org.example.newsfeed.domain.follow.repository.FollowRepository;
 import org.example.newsfeed.domain.user.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,22 +20,15 @@ import java.util.Random;
 
 @Component
 @Transactional
+@RequiredArgsConstructor
 public class DummyDataLoader implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final FeedRepository feedRepository;
     private final CommentRepository commentRepository;
     private final FollowRepository followRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public DummyDataLoader(UserRepository userRepository,
-                           FeedRepository feedRepository,
-                           CommentRepository commentRepository,
-                           FollowRepository followRepository) {
-        this.userRepository = userRepository;
-        this.feedRepository = feedRepository;
-        this.commentRepository = commentRepository;
-        this.followRepository = followRepository;
-    }
 
     @Override
     public void run(String... args) throws Exception {
@@ -45,7 +40,7 @@ public class DummyDataLoader implements CommandLineRunner {
             User user = new User(
                     "user" + i,
                     "user" + i + "@example.com",
-                    "password" + i,
+                    passwordEncoder.encode("password" + i),
                     "안녕하세요! 저는 user" + i + "입니다."
             );
             LocalDateTime date = now.minusDays(20 - i);
