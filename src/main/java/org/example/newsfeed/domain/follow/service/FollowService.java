@@ -24,7 +24,7 @@ public class FollowService {
 
     @Transactional
     public CreateFollowResponse createFollow(Long followedUserId, Long followingUserId) {
-        if(followedUserId.equals(followingUserId)) {
+        if (followedUserId.equals(followingUserId)) {
             throw new CustomException(ErrorMessage.CANNOT_FOLLOW_SELF);
         }
 
@@ -58,7 +58,7 @@ public class FollowService {
         Pageable pageable = Pageable.ofSize(size).withPage(page);
         Page<Follow> followers = followRepository.findFollowsByFollowedUser_Id(userId, pageable);
 
-        return followers.map(x-> UserDTO.from(userRepository.findById(x.getFollowedUser().getId())
+        return followers.map(x -> UserDTO.from(userRepository.findById(x.getFollowedUser().getId())
                 .orElseThrow(() -> new CustomException(ErrorMessage.NOT_FOUND_USER))));
     }
 
@@ -67,7 +67,7 @@ public class FollowService {
         Pageable pageable = Pageable.ofSize(size).withPage(page);
         Page<Follow> followers = followRepository.findFollowsByFollowingUser_Id(userId, pageable);
 
-        return followers.map(x-> UserDTO.from(userRepository.findById(x.getFollowingUser().getId())
+        return followers.map(x -> UserDTO.from(userRepository.findById(x.getFollowingUser().getId())
                 .orElseThrow(() -> new CustomException(ErrorMessage.NOT_FOUND_USER))));
     }
 

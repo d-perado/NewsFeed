@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 //10개씩 페이지네이션하여, 각 페이지 당 뉴스피드 데이터가 10개씩 나오게 합니다.
 
 
-
 @RestController
 @RequiredArgsConstructor
 public class FeedController {
@@ -95,11 +94,20 @@ public class FeedController {
             @RequestBody GetPeriodsFeedRequest request,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page,size);
+        Pageable pageable = PageRequest.of(page, size);
 
-        Page<GetFeedResponse> result = feedService.getPeriodFeeds(request.getStartDate(),request.getLastDate(),pageable);
+        Page<GetFeedResponse> result = feedService.getPeriodFeeds(request.getStartDate(), request.getLastDate(), pageable);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @GetMapping("/users/me/feeds")
+    public ResponseEntity<Page<GetFeedPageResponse>> handlerGetFollowPriorityFeeds(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<GetFeedPageResponse> result = feedService.getFeedsByFollowPriority(pageable);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
 }
