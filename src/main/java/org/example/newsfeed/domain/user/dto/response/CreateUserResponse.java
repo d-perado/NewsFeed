@@ -2,6 +2,7 @@ package org.example.newsfeed.domain.user.dto.response;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.example.newsfeed.common.entity.User;
 
 import java.time.LocalDateTime;
 
@@ -16,4 +17,13 @@ public class CreateUserResponse {
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
+    public static CreateUserResponse from(User user) {
+        return new CreateUserResponse(user.getId(),
+                user.getNickname(),
+                user.getEmail(),
+                user.getIntroduction(),
+                user.getCreatedAt(),
+                user.getUpdatedAt()
+        );
+    }
 }
