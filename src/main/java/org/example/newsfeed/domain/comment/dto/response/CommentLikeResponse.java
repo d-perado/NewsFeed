@@ -1,16 +1,15 @@
 package org.example.newsfeed.domain.comment.dto.response;
 
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.example.newsfeed.domain.comment.dto.CommentDTO;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CommentLikeResponse {
 
-    private Long commentId;
-    private Long userId;
-    private boolean isLike;
-    private Long LikeCount;
+    private final Long commentId;
+    private final Long userId;
+    private final boolean isLike;
+    private final Long LikeCount;
 }

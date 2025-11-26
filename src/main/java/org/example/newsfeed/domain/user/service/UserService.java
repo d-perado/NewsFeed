@@ -29,15 +29,17 @@ public class UserService {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
     // 사용자 생성
     @Transactional
     public CreateUserResponse createUser(CreateUserRequest request) {
 
-        User user= new User(request.getNickname(), request.getEmail(),passwordEncoder.encode(request.getPassword()), request.getIntroduction());
+        User user = new User(request.getNickname(), request.getEmail(), passwordEncoder.encode(request.getPassword()), request.getIntroduction());
         User savedUser = userRepository.save(user);
 
         return CreateUserResponse.from(savedUser);
     }
+
     // 사용자 단건조회
     @Transactional(readOnly = true)
     public GetUserResponse getUser(Long userId) {
@@ -53,7 +55,8 @@ public class UserService {
 
     //사용자 자기자신 조회
     public GetUserResponse getUserSelf(UserDetails user) {
-        User findUser = userRepository.findByEmail(user.getUsername()).orElseThrow(()->new IllegalStateException("존재하지 않는유저 입니다."));
+        User findUser = userRepository.findByEmail(user.getUsername()).orElseThrow(
+                () -> new IllegalStateException("존재하지 않는유저 입니다."));
 
         return GetUserResponse.from(findUser);
     }
@@ -65,6 +68,7 @@ public class UserService {
         return allUser.stream().map(GetUserResponse::from).toList();
 
     }
+
     // 사용자 수정
     @Transactional
     public UpdateUserResponse updateUser(UserDetails user, UpdateUserRequest request) {
