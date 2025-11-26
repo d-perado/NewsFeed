@@ -1,7 +1,6 @@
 package org.example.newsfeed.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.example.newsfeed.common.entity.User;
 import org.example.newsfeed.common.auth.JwtToken;
 import org.example.newsfeed.common.auth.JwtTokenProvider;
@@ -112,7 +111,7 @@ public class UserService {
         // 1-3. 사용자 아이디가 존재할때 삭제처리
         userRepository.deleteById(findUser.getId());
     }
-
+    //로그인
     public JwtToken login(String email, String password) {
         // 1.email + password 를 기반으로 Authentication 객체 생성
         // 이때 authentication 은 인증 여부를 확인하는 authenticated 값이 false

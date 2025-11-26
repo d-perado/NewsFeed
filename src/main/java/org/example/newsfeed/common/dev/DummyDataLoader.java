@@ -40,7 +40,7 @@ public class DummyDataLoader implements CommandLineRunner {
             User user = new User(
                     "user" + i,
                     "user" + i + "@example.com",
-                    passwordEncoder.encode("password" + i),
+                    passwordEncoder.encode("Password#" + i),
                     "안녕하세요! 저는 user" + i + "입니다."
             );
             LocalDateTime date = now.minusDays(20 - i);
