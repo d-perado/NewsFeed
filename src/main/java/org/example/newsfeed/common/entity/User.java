@@ -14,6 +14,7 @@ import java.util.List;
 @Table(name = "users")
 @Getter
 @NoArgsConstructor
+
 public class User extends TimeBaseEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -70,9 +71,5 @@ public class User extends TimeBaseEntity implements UserDetails {
         return true;
     }
 
-    @Override
-    public boolean isEnabled() {
-        // 삭제 상태일 때만 false 처리하여 로그인을 못하게 함
-        return !this.isDeleted;
-    }
+
 }

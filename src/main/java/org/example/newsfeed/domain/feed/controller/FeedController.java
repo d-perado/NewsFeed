@@ -17,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,12 +41,14 @@ public class FeedController {
     /**
      * 피드 생성
      */
-    @PostMapping("/users/{userId}/feeds")
+    @PostMapping("/feeds")
     public ResponseEntity<CreateFeedResponse> handlerCreateFeed(
-            @PathVariable Long userId,
-            @Valid @RequestBody CreateFeedRequest request
+            @Valid @RequestBody CreateFeedRequest request,
+            @AuthenticationPrincipal UserDetails user
     ) {
-        return ResponseEntity.ok(feedService.createFeed(userId, request));
+        String userEmail = user.getUsername();
+
+        return ResponseEntity.ok(feedService.createFeed(request, userEmail));
     }
 
 
@@ -78,14 +82,12 @@ public class FeedController {
     @PatchMapping("/feeds/{feedId}")
     public ResponseEntity<UpdateFeedResponse> handlerUpdateFeed(
             @PathVariable Long feedId,
-            @Valid @RequestBody UpdateFeedRequest request
-            ) {
+            @Valid @RequestBody UpdateFeedRequest request,
+            @AuthenticationPrincipal UserDetails user
+    ) {
+        String userEamil = user.getUsername();
 
-//        CustomUserDetails user = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long userId = 1L;
-        // id 가져와서 피드의 user_id 와 일치한지 확인 후 / 예외 처리
-
-        return ResponseEntity.status(HttpStatus.OK).body(feedService.updateFeed(feedId, request));
+        return ResponseEntity.status(HttpStatus.OK).body(feedService.updateFeed(feedId, request, userEamil));
     }
 
 
@@ -94,10 +96,12 @@ public class FeedController {
      */
     @DeleteMapping("/feeds/{feedId}")
     public ResponseEntity<Void> handlerDeleteFeed(
-            @PathVariable Long feedId
+            @PathVariable Long feedId,
+            @AuthenticationPrincipal UserDetails user
     ) {
+        String userEamil = user.getUsername();
 
-        feedService.delete(feedId);
+        feedService.delete(feedId, userEamil);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
