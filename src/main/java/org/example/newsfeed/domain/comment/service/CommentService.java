@@ -132,7 +132,7 @@ public class CommentService {
             commentLikeRepository.save(newLike);
 
             // Comment 엔티티의 좋아요 카운트 증가
-            comment.increaseLikeCount();
+            comment.increaseLikes();
             isLiked = true;
         }
 
