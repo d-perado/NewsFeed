@@ -57,15 +57,7 @@ public class FeedService {
     public Page<GetFeedPageResponse> getFeeds(Pageable pageable) {
         Page<Feed> feedList = feedRepository.findAll(pageable);
 
-
-        for (Feed feed : feedList) {
-            Long currentLikeCount = feedLikeRepository.countByFeed(feed);
-
-
-        }
-
-
-        return feedList.map(feed -> GetFeedPageResponse.from(FeedDTO.from(feed)), currentLikeCount);
+        return feedList.map(feed -> GetFeedPageResponse.from(FeedDTO.from(feed)));
     }
 
     /**
@@ -78,11 +70,9 @@ public class FeedService {
                 () -> new CustomException(ErrorMessage.NOT_FOUND_FEED)
         );
 
-        Long currentLikeCount = feedLikeRepository.countByFeed(feed);
-
         FeedDTO dto = FeedDTO.from(feed);
 
-        return GetFeedResponse.from(dto, currentLikeCount);
+        return GetFeedResponse.from(dto);
 
     }
 
@@ -136,11 +126,11 @@ public class FeedService {
         feedRepository.delete(feed);
     }
 
-//    @Transactional(readOnly = true)
-//    public Page<GetFeedResponse> getPeriodFeeds(LocalDateTime startDate, LocalDateTime lastDate, Pageable pageable) {
-//        Page<Feed> feeds = feedRepository.findAllsByCreatedAtBetween(startDate, lastDate, pageable);
-//        return feeds.map(FeedDTO::from).map(GetFeedResponse::from);
-//    }
+    @Transactional(readOnly = true)
+    public Page<GetFeedResponse> getPeriodFeeds(LocalDateTime startDate, LocalDateTime lastDate, Pageable pageable) {
+        Page<Feed> feeds = feedRepository.findAllsByCreatedAtBetween(startDate, lastDate, pageable);
+        return feeds.map(FeedDTO::from).map(GetFeedResponse::from);
+    }
 
     @Transactional(readOnly = true)
     public Page<GetFeedPageResponse> getFeedsByFollowPriority(Pageable pageable) {

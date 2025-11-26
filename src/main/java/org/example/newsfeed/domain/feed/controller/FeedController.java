@@ -104,17 +104,17 @@ public class FeedController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-//    @GetMapping("/feeds/period")
-//    public ResponseEntity<Page<GetFeedResponse>> handlerGetPeriodFeeds(
-//            @RequestBody GetPeriodsFeedRequest request,
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "10") int size) {
-//        Pageable pageable = PageRequest.of(page, size);
-//
-//        Page<GetFeedResponse> result = feedService.getPeriodFeeds(request.getStartDate(), request.getLastDate(), pageable);
-//
-//        return ResponseEntity.status(HttpStatus.OK).body(result);
-//    }
+    @GetMapping("/feeds/period")
+    public ResponseEntity<Page<GetFeedResponse>> handlerGetPeriodFeeds(
+            @RequestBody GetPeriodsFeedRequest request,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<GetFeedResponse> result = feedService.getPeriodFeeds(request.getStartDate(), request.getLastDate(), pageable);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
 
     @GetMapping("/users/me/feeds")
     public ResponseEntity<Page<GetFeedPageResponse>> handlerGetFollowPriorityFeeds(

@@ -18,12 +18,12 @@ public class GetFeedResponse {
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
-    public static GetFeedResponse from(FeedDTO dto, Long likeCount) {
+    public static GetFeedResponse from(FeedDTO dto) {
         return new GetFeedResponse(
                 dto.getId(),
                 dto.getWriter().getNickname(),
                 dto.getContent(),
-                likeCount,
+                dto.getLikeCount(),
                 dto.getCreatedAt(),
                 dto.getUpdatedAt()
         );
