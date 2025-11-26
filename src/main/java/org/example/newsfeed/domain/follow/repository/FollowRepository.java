@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 @Repository
 public interface FollowRepository extends JpaRepository<Follow, Long> {
     boolean existsByTo_IdAndFrom_Id(Long followedUserId, Long followingUserId);
@@ -30,4 +31,5 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
 
     void deleteFollowByTo_IdAndFrom_Id(Long followedUserId, Long followingUserId);
 
+    List<Follow> findAllByFollowingUser_Id(Long followingUserId);
 }
