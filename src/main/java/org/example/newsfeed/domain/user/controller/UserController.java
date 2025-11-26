@@ -8,13 +8,14 @@ import org.example.newsfeed.domain.user.dto.request.CreateUserRequest;
 import org.example.newsfeed.domain.user.dto.request.DeleteUserRequest;
 import org.example.newsfeed.domain.user.dto.request.UpdateUserRequest;
 import org.example.newsfeed.domain.user.dto.response.CreateUserResponse;
-import org.example.newsfeed.domain.user.dto.response.GetAllUserResponse;
-import org.example.newsfeed.domain.user.dto.response.GetOneUserResponse;
+import org.example.newsfeed.domain.user.dto.response.GetUserResponse;
 import org.example.newsfeed.domain.user.dto.response.UpdateUserResponse;
 import org.example.newsfeed.domain.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -31,14 +32,14 @@ public class UserController {
     }
     // 사용자 단건조회
     @GetMapping("/{userId}")
-    public ResponseEntity<GetOneUserResponse> handlerGetUser(@PathVariable Long userId) {
-        GetOneUserResponse oneUser = userService.getUser(userId);
+    public ResponseEntity<GetUserResponse> handlerGetUser(@PathVariable Long userId) {
+        GetUserResponse oneUser = userService.getUser(userId);
         return ResponseEntity.status(HttpStatus.OK).body(oneUser);
     }
     // 사용자 전체조회
     @GetMapping
-    public ResponseEntity<GetAllUserResponse> handlerGetAllUsers() {
-        GetAllUserResponse allUser = userService.getAllUsers();
+    public ResponseEntity<List<GetUserResponse>> handlerGetAllUsers() {
+        List<GetUserResponse> allUser = userService.getAllUsers();
         return ResponseEntity.status(HttpStatus.OK).body(allUser);
     }
     // 사용자 수정

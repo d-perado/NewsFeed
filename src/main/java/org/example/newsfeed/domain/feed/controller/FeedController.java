@@ -3,11 +3,9 @@ package org.example.newsfeed.domain.feed.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.newsfeed.domain.feed.dto.request.CreateFeedRequest;
+import org.example.newsfeed.domain.feed.dto.request.GetPeriodsFeedRequest;
 import org.example.newsfeed.domain.feed.dto.request.UpdateFeedRequest;
-import org.example.newsfeed.domain.feed.dto.response.CreateFeedResponse;
-import org.example.newsfeed.domain.feed.dto.response.GetFeedPageResponse;
-import org.example.newsfeed.domain.feed.dto.response.GetFeedResponse;
-import org.example.newsfeed.domain.feed.dto.response.UpdateFeedResponse;
+import org.example.newsfeed.domain.feed.dto.response.*;
 import org.example.newsfeed.domain.feed.service.FeedService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -99,4 +97,17 @@ public class FeedController {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    @GetMapping("/feeds/period")
+    public ResponseEntity<Page<GetFeedResponse>> handlerGetPeriodFeeds(
+            @RequestBody GetPeriodsFeedRequest request,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page,size);
+
+        Page<GetFeedResponse> result = feedService.getPeriodFeeds(request.getStartDate(),request.getLastDate(),pageable);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
 }
