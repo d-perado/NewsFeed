@@ -63,10 +63,9 @@ public class FollowService {
         User findUser = userRepository.findByEmail(user.getUsername()).orElseThrow(()-> new IllegalStateException("존재하지 않는 유저입니다."));
 
         Pageable pageable = Pageable.ofSize(size).withPage(page);
-        Page<Follow> followers = followRepository.findFollowsByTo_Id(findUser.getId(), pageable);
+        Page<User> following = followRepository.findFollowersByTo_Id(findUser.getId(), pageable);
 
-        return followers.map(x-> UserDTO.from(userRepository.findById(x.getTo().getId())
-                .orElseThrow(() -> new CustomException(ErrorMessage.NOT_FOUND_USER))));
+        return following.map(UserDTO::from);
     }
 
     @Transactional(readOnly = true)
@@ -74,10 +73,9 @@ public class FollowService {
         User findUser = userRepository.findByEmail(user.getUsername()).orElseThrow(()-> new IllegalStateException("존재하지 않는 유저입니다."));
 
         Pageable pageable = Pageable.ofSize(size).withPage(page);
-        Page<Follow> followers = followRepository.findFollowsByFrom_Id(findUser.getId(), pageable);
+        Page<User> followers = followRepository.findFollowingsByFrom_Id(findUser.getId(), pageable);
 
-        return followers.map(x-> UserDTO.from(userRepository.findById(x.getFrom().getId())
-                .orElseThrow(() -> new CustomException(ErrorMessage.NOT_FOUND_USER))));
+        return followers.map(UserDTO::from);
     }
 
     private User getUser(Long id) {
