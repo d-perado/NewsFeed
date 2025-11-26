@@ -7,6 +7,8 @@ import org.example.newsfeed.domain.user.dto.UserDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,35 +18,37 @@ public class FollowController {
     private final FollowService followService;
 
     @PostMapping("/follows")
-    public ResponseEntity<CreateFollowResponse> handlerCreateFollow(@RequestParam Long followedUserId, @RequestParam Long followingUserId) {
-        CreateFollowResponse createFollowResponse = followService.createFollow(followedUserId,followingUserId);
+    public ResponseEntity<CreateFollowResponse> handlerCreateFollow(@AuthenticationPrincipal UserDetails user,
+                                                                    @RequestParam Long fromUserId) {
+        CreateFollowResponse createFollowResponse = followService.createFollow(user,fromUserId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createFollowResponse);
     }
 
     @DeleteMapping("/follows")
-    public ResponseEntity<Void> handlerDeleteFollow(@RequestParam Long followedUserId, @RequestParam Long followingUserId) {
-        followService.deleteFollow(followedUserId, followingUserId);
+    public ResponseEntity<Void> handlerDeleteFollow(@AuthenticationPrincipal UserDetails user,
+                                                    @RequestParam Long fromUserId) {
+        followService.deleteFollow(user, fromUserId);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping("/follower/{userId}")
-    public ResponseEntity<Page<UserDTO>> handlerGetAllFollowers(@PathVariable Long userId,
+    @GetMapping("/followers")
+    public ResponseEntity<Page<UserDTO>> handlerGetAllFollowers(@AuthenticationPrincipal UserDetails user,
                                                                 @RequestParam(defaultValue = "0") int page,
                                                                 @RequestParam(defaultValue = "10") int size) {
 
-        Page<UserDTO> result = followService.getAllFollowers(userId, page, size);
+        Page<UserDTO> result = followService.getAllFollowers(user, page, size);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @GetMapping("/following/{userId}")
-    public ResponseEntity<Page<UserDTO>> handlerGetAllFollowings(@PathVariable Long userId,
+    @GetMapping("/followings")
+    public ResponseEntity<Page<UserDTO>> handlerGetAllFollowings(@AuthenticationPrincipal UserDetails user,
                                                                  @RequestParam(defaultValue = "0") int page,
                                                                  @RequestParam(defaultValue = "10") int size) {
 
-        Page<UserDTO> result = followService.getAllFollowings(userId, page, size);
+        Page<UserDTO> result = followService.getAllFollowings(user, page, size);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }

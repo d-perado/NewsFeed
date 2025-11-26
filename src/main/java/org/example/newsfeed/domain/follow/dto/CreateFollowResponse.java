@@ -12,8 +12,8 @@ public class CreateFollowResponse {
 
     public static CreateFollowResponse from(Follow follow) {
         return new CreateFollowResponse(
-                follow.getFollowedUser().getId(),
-                follow.getFollowingUser().getId()
+                follow.getTo().getId(),
+                follow.getFrom().getId()
         );
     }
 }

@@ -9,24 +9,24 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FollowRepository extends JpaRepository<Follow, Long> {
-    boolean existsByFollowedUser_IdAndFollowingUser_Id(Long followedUserId, Long followingUserId);
+    boolean existsByTo_IdAndFrom_Id(Long followedUserId, Long followingUserId);
 
     @Query("""
     SELECT f
     FROM Follow f
-    JOIN FETCH f.followedUser
-    WHERE f.followedUser.id = :userId
+    JOIN FETCH f.to
+    WHERE f.from.id = :userId
 """)
-    Page<Follow> findFollowsByFollowedUser_Id(Long userId, Pageable pageable);
+    Page<Follow> findFollowsByTo_Id(Long userId, Pageable pageable);
 
     @Query("""
     SELECT f
     FROM Follow f
-    JOIN FETCH f.followingUser
-    WHERE f.followingUser.id = :userId
+    JOIN FETCH f.to
+    WHERE f.from.id = :userId
 """)
-    Page<Follow> findFollowsByFollowingUser_Id(Long userId, Pageable pageable);
+    Page<Follow> findFollowsByFrom_Id(Long userId, Pageable pageable);
 
-    void deleteFollowByFollowedUser_IdAndFollowingUser_Id(Long followedUserId, Long followingUserId);
+    void deleteFollowByTo_IdAndFrom_Id(Long followedUserId, Long followingUserId);
 
 }
