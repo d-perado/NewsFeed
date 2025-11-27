@@ -1,5 +1,6 @@
 package org.example.newsfeed.domain.comment.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.newsfeed.domain.comentlike.service.CommentLikeService;
 import org.example.newsfeed.domain.comment.dto.request.CreateCommentRequest;
@@ -28,7 +29,7 @@ public class CommentController {
     @PostMapping("/feeds/{feedId}/comments")
     public ResponseEntity<CreateCommentResponse> handlerCreateComment(
             @PathVariable("feedId") Long feedId,
-            @RequestBody CreateCommentRequest request,
+            @Valid @RequestBody CreateCommentRequest request,
             @AuthenticationPrincipal UserDetails user
     ) {
         String userEmail = user.getUsername();
@@ -54,7 +55,7 @@ public class CommentController {
     @PatchMapping("/comments/{commentId}")
     public ResponseEntity<UpdateCommentResponse> handlerUpdateComment(
             @PathVariable Long commentId,
-            @RequestBody UpdateCommentRequest request,
+            @Valid @RequestBody UpdateCommentRequest request,
             @AuthenticationPrincipal UserDetails user
     ) {
         String userEmail = user.getUsername();

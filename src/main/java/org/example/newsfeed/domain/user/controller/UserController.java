@@ -57,7 +57,7 @@ public class UserController {
     @PatchMapping("/users")
     public ResponseEntity<UpdateUserResponse> handlerUpdateUser(
             @AuthenticationPrincipal UserDetails user,
-            @RequestBody UpdateUserRequest request) {
+            @Valid @RequestBody UpdateUserRequest request) {
 
         UpdateUserResponse updatedUser = userService.updateUser(user, request);
         return ResponseEntity.status(HttpStatus.OK).body(updatedUser);
@@ -67,7 +67,7 @@ public class UserController {
     @PatchMapping("/users/deletion")
     public ResponseEntity<Void> handlerDeleteUser(
             @AuthenticationPrincipal UserDetails user,
-            @RequestBody DeleteUserRequest request) {
+            @Valid @RequestBody DeleteUserRequest request) {
 
         userService.deleteUser(user, request);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
