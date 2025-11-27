@@ -20,7 +20,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
 @Service
@@ -38,80 +37,94 @@ public class UserService {
     public CreateUserResponse createUser(CreateUserRequest request) {
 
         User user = new User(request.getNickname(), request.getEmail(), passwordEncoder.encode(request.getPassword()), request.getIntroduction());
+
         User savedUser = userRepository.save(user);
 
         return CreateUserResponse.from(savedUser);
     }
 
+
     // 사용자 단건조회
     @Transactional(readOnly = true)
     public GetUserResponse getUser(Long userId) {
+
+        // 유저 존재 여부
         User findedUser = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalStateException("존재하지 않는 유저입니다.")
+                () -> new CustomException(ErrorMessage.NOT_FOUND_USER)
         );
+
+        // 유저 탈퇴 여부
         if (findedUser.isDeleted()) {
-            throw new IllegalStateException("존재하지 않는 유저입니다.");
+            throw new CustomException(ErrorMessage.NOT_FOUND_USER);
         }
 
         return GetUserResponse.from(findedUser);
     }
 
+
     //사용자 자기자신 조회
     public GetUserResponse getUserSelf(UserDetails user) {
+
         User findUser = userRepository.findByEmail(user.getUsername()).orElseThrow(
-                () -> new IllegalStateException("존재하지 않는유저 입니다."));
+                () -> new CustomException(ErrorMessage.NOT_FOUND_USER)
+        );
 
         return GetUserResponse.from(findUser);
     }
 
+
     // 사용자 전체조회
     @Transactional(readOnly = true)
     public List<GetUserResponse> getAllUsers() {
-        List<User> allUser = userRepository.getNonDeletedAllUser();
-        return allUser.stream().map(GetUserResponse::from).toList();
 
+        List<User> allUser = userRepository.getNonDeletedAllUser();
+
+        return allUser.stream().map(GetUserResponse::from).toList();
     }
+
 
     // 사용자 수정
     @Transactional
     public UpdateUserResponse updateUser(UserDetails user, UpdateUserRequest request) {
 
+        // 유저 존재 여부
         User findUser = userRepository.findByEmail(user.getUsername()).orElseThrow(
-                () -> new IllegalStateException("존재하지 않는 유저입니다.")
+                () -> new CustomException(ErrorMessage.NOT_FOUND_USER)
         );
-        if (findUser.isDeleted()) {
-            throw new IllegalStateException("존재하지 않는 유저입니다.");
-        }
 
-        if (!passwordEncoder.matches(request.getPassword(), findUser.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        // 유저 탈퇴 여부
+        if (findUser.isDeleted()) {
+            throw new CustomException(ErrorMessage.NOT_FOUND_USER);
         }
 
         findUser.modify(
-                request.getEmail(),
-                request.getPassword(),
+                passwordEncoder.encode(request.getPassword()),
                 request.getIntroduction()
         );
 
         return UpdateUserResponse.from(findUser);
     }
 
+
     // 사용자 삭제
     @Transactional
     public void deleteUser(UserDetails user, DeleteUserRequest request) {
-        // 1-1. 사용자 아이디가 존재하지 않을때 예외처리
+
         User findUser = userRepository.findByEmail(user.getUsername()).orElseThrow(
                 () -> new CustomException(ErrorMessage.NOT_FOUND_USER));
-        // 1-2. 사용자 아이디와 비밀번호가 일치하지 않는 경우
+
         if (!findUser.getEmail().equals(request.getEmail())) {
             throw new CustomException(ErrorMessage.EMAIL_NOT_MATCH);
         }
+
         if (!passwordEncoder.matches(request.getPassword(), findUser.getPassword())) {
             throw new CustomException(ErrorMessage.PASSWORD_NOT_MATCH);
         }
-        // 1-3. 사용자 아이디가 존재할때 삭제처리
+
         userRepository.deleteById(findUser.getId());
     }
+
+
     //로그인
     public JwtToken login(String email, String password) {
         // 1.email + password 를 기반으로 Authentication 객체 생성
@@ -124,6 +137,5 @@ public class UserService {
 
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
         return jwtTokenProvider.generateToken(authentication);
-
     }
 }

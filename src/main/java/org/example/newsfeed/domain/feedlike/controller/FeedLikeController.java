@@ -18,9 +18,7 @@ public class FeedLikeController {
 
     private final FeedLikeService feedLikeService;
 
-    /**
-     * 피드 좋아요
-     */
+    // 피드 좋아요
     @PostMapping("/feeds/{feedId}/likes")
     public ResponseEntity<LikeFeedResponse> handlerCreateFeedLike(
             @PathVariable Long feedId,
@@ -33,9 +31,7 @@ public class FeedLikeController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    /**
-     * 피드 좋아요 취소
-     */
+    // 피드 좋아요 취소
     @DeleteMapping("/feeds/{feedId}/likes")
     public ResponseEntity<Void> handlerDeleteFeedLike(
             @PathVariable Long feedId,

@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.newsfeed.common.entity.User;
-
 import java.time.LocalDateTime;
 
 @Getter

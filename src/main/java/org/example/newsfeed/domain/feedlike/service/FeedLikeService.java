@@ -4,11 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.example.newsfeed.common.entity.Feed;
 import org.example.newsfeed.common.entity.FeedLike;
 import org.example.newsfeed.common.entity.User;
+import org.example.newsfeed.common.exception.CustomException;
+import org.example.newsfeed.common.exception.ErrorMessage;
 import org.example.newsfeed.domain.feed.repository.FeedRepository;
 import org.example.newsfeed.domain.feedlike.dto.FeedLikeDTO;
 import org.example.newsfeed.domain.feedlike.dto.response.LikeFeedResponse;
 import org.example.newsfeed.domain.feedlike.repository.FeedLikeRepository;
 import org.example.newsfeed.domain.user.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,79 +24,59 @@ public class FeedLikeService {
     private final FeedRepository feedRepository;
     private final FeedLikeRepository feedLikeRepository;
 
-    /**
-     * 피드 좋아요
-     */
+    // 피드 좋아요
     public LikeFeedResponse likeFeed(Long feedId, String userEmail) {
 
-        // 1. 해당 피드가 있는지 조회
         Feed feed = feedRepository.findById(feedId).orElseThrow(
-                () -> new IllegalStateException("해당 피드가 없습니다.")
+                () -> new CustomException(ErrorMessage.NOT_FOUND_FEED)
         );
 
-        // 2. 해당 유저가 있는지 조회
         User user = userRepository.findByEmail(userEmail).orElseThrow(
-                () -> new IllegalStateException("해당 이메일의 유저가 없습니다.")
+                () -> new CustomException(ErrorMessage.NOT_FOUND_USER)
         );
 
-        // 3. 해당 피드의 유저와 userEmail이 같을 경우 -> 본인이 작성한 게시물과 댓글에 좋아요를 남길 수 없습니다. 예외처리
         if (feed.getWriter().getEmail().equals(userEmail)) {
-            throw new IllegalStateException("본인이 작성한 게시물에 좋아요를 남길 수 없습니다.");
+            throw new CustomException(ErrorMessage.SELF_LIKE_FORBIDDEN);
         }
 
-        // 4. 본인이 작성한 글이 아니라면 - 좋아요 여부 확인 (좋아요 행이 있는지 확인)
         boolean isLiked = feedLikeRepository.existsByFeedAndUser(feed, user);
 
-        // 4-1. 좋아요를 누르지 않았을 때
         if (!isLiked) {
-            // 좋아요 생성
             FeedLike feedLike = new FeedLike(user, feed);
 
-            // 좋아요 저장
             feedLikeRepository.save(feedLike);
 
-            // 좋아요 카운트 증가
             feed.increaseLike();
-
         } else {
-            // 4-2. 이미 좋아요를 눌렀다면
-            throw new IllegalStateException("같은 게시물에는 사용자당 한 번만 좋아요가 가능합니다.");
+            throw new CustomException(ErrorMessage.DUPLICATE_LIKE);
         }
 
-        // 5. 현재 좋아요 수 반환
         Long currentLikeCount = feedLikeRepository.countByFeed(feed);
 
-        // 6. FeedLikeDTO 반환
         FeedLike feedLike = feedLikeRepository.findByFeedAndUser(feed, user).get();
         FeedLikeDTO dto = FeedLikeDTO.from(feedLike);
 
         return LikeFeedResponse.from(dto, currentLikeCount);
-
     }
 
-    /**
-     * 피드 좋아요 취소
-     */
+
+    // 피드 좋아요 취소
     public void unlikeFeed(Long feedId, String userEmail) {
-        // 1. 해당 피드가 있는지 조회
+
         Feed feed = feedRepository.findById(feedId).orElseThrow(
-                () -> new IllegalStateException("해당 피드가 없습니다.")
+                () -> new CustomException(ErrorMessage.NOT_FOUND_FEED)
         );
 
-        // 2. 해당 유저가 있는지 조회
         User user = userRepository.findByEmail(userEmail).orElseThrow(
-                () -> new IllegalStateException("해당 이메일의 유저가 없습니다.")
+                () -> new CustomException(ErrorMessage.NOT_FOUND_USER)
         );
 
-        // 3. 좋아요가 존재하지 않으면 취소할 수 없음
         FeedLike feedLike = feedLikeRepository.findByFeedAndUser(feed, user).orElseThrow(
-                () -> new IllegalStateException("좋아요를 누르지 않은 게시물입니다.")
+                () -> new CustomException(ErrorMessage.NOT_FOUND_LIKE)
         );
 
-        // 3. 좋아요 삭제
         feedLikeRepository.delete(feedLike);
 
-        // 4. 좋아요 카운트 감소
         feed.decreaseLike();
     }
 }

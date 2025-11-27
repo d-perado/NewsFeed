@@ -5,6 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class DeleteUserRequest {
+
     @NotBlank(message = "이메일을 작성해주세요")
     private String email;
 

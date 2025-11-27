@@ -9,6 +9,7 @@ import org.example.newsfeed.domain.comment.dto.request.UpdateCommentRequest;
 import org.example.newsfeed.domain.comment.dto.response.CreateCommentResponse;
 import org.example.newsfeed.domain.comment.dto.response.GetCommentPageResponse;
 import org.example.newsfeed.domain.comment.dto.response.UpdateCommentResponse;
+import org.example.newsfeed.domain.commentlike.repository.CommentLikeRepository;
 import org.example.newsfeed.domain.feed.repository.FeedRepository;
 import org.example.newsfeed.domain.user.repository.UserRepository;
 import org.springframework.data.domain.Page;
@@ -49,6 +50,7 @@ public class CommentService {
 
     }
 
+
     // 댓글 전체 조회
     @Transactional(readOnly = true)
     public Page<GetCommentPageResponse> getAll(Pageable pageable) {
@@ -58,6 +60,7 @@ public class CommentService {
         return commentPage.map(comment -> GetCommentPageResponse.from(CommentDTO.from(comment)));
     }
 
+
     // 댓글 수정
     public UpdateCommentResponse update(Long commentId, UpdateCommentRequest request, String email) {
 
@@ -65,7 +68,7 @@ public class CommentService {
                 () -> new CustomException(ErrorMessage.NOT_FOUND_COMMENT)
         );
 
-        checkOwnerEmail(email, comment);
+        checkCommentOwnerEmail(email, comment);
 
         comment.modify(request);
         CommentDTO dto = CommentDTO.from(comment);
@@ -74,6 +77,7 @@ public class CommentService {
 
     }
 
+
     // 댓글 삭제
     public void delete(Long commentId, String email) {
 
@@ -81,12 +85,15 @@ public class CommentService {
                 () -> new CustomException(ErrorMessage.NOT_FOUND_COMMENT)
         );
 
-        checkOwnerEmail(email, comment);
+        checkCommentOwnerEmail(email, comment);
+
 
         commentRepository.deleteById(commentId);
     }
 
-    private static void checkOwnerEmail(String email, Comment comment) {
+
+    //댓글 주인의 Email 과 일치 확인
+    private static void checkCommentOwnerEmail(String email, Comment comment) {
         boolean emailEquals = comment.getUser().getEmail().equals(email);
 
         if(!emailEquals) {

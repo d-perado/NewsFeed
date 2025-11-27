@@ -45,8 +45,7 @@ public class User extends TimeBaseEntity implements UserDetails {
         this.isDeleted = false;
     }
 
-    public void modify(String email, String password, String introduction) {
-        this.email = email;
+    public void modify(String password, String introduction) {
         this.password = password;
         this.introduction = introduction;
     }

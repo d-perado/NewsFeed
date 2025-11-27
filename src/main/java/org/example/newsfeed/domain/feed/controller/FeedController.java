@@ -23,9 +23,8 @@ public class FeedController {
 
     private final FeedService feedService;
 
-    /**
-     * 피드 생성
-     */
+
+    // 피드 생성
     @PostMapping("/feeds")
     public ResponseEntity<CreateFeedResponse> handlerCreateFeed(
             @Valid @RequestBody CreateFeedRequest request,
@@ -39,32 +38,32 @@ public class FeedController {
     }
 
 
-    /**
-     * 피드 전체 조회 - 페이징 처리
-     */
+    // 피드 전체 조회 - 페이징 처리
     @GetMapping("/feeds")
     public ResponseEntity<Page<GetFeedPageResponse>> handlerGetFeeds(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-        return ResponseEntity.status(HttpStatus.OK).body(feedService.getFeeds(pageable));
+
+        Page<GetFeedPageResponse> result = feedService.getFeeds(pageable);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    /**
-     * 피드 단건 조회
-     */
+
+    // 피드 단건 조회
     @GetMapping("/feeds/{feedId}")
     public ResponseEntity<GetFeedResponse> handlerGetOne(
             @PathVariable Long feedId
     ) {
-        return ResponseEntity.status(HttpStatus.OK).body(feedService.getOne(feedId));
+        GetFeedResponse result = feedService.getOne(feedId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
 
-    /**
-     * 피드 수정 - 추후, JWT 구현 후 리팩터링 예정
-     */
+    // 피드 수정
     @PatchMapping("/feeds/{feedId}")
     public ResponseEntity<UpdateFeedResponse> handlerUpdateFeed(
             @PathVariable Long feedId,
@@ -73,10 +72,13 @@ public class FeedController {
     ) {
         String userEmail = user.getUsername();
 
-        return ResponseEntity.status(HttpStatus.OK).body(feedService.updateFeed(feedId, request, userEmail));
+        UpdateFeedResponse result = feedService.updateFeed(feedId, request, userEmail);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    //피드 삭제  */
+
+    //피드 삭제
     @DeleteMapping("/feeds/{feedId}")
     public ResponseEntity<Void> handlerDeleteFeed(
             @PathVariable Long feedId,
@@ -88,24 +90,31 @@ public class FeedController {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-    //기간별 검색 기능
+
+
+    // 기간별 검색 기능
     @GetMapping("/feeds/period")
     public ResponseEntity<Page<GetFeedResponse>> handlerGetPeriodFeeds(
             @RequestBody GetPeriodsFeedRequest request,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size
+    ) {
         Pageable pageable = PageRequest.of(page, size);
 
         Page<GetFeedResponse> result = feedService.getPeriodFeeds(request.getStartDate(), request.getLastDate(), pageable);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
-    //내가 팔로우한 사람 피드 우선 조회
+
+
+    // 내가 팔로우한 사람 피드 우선 조회
     @GetMapping("/users/me/feeds")
     public ResponseEntity<Page<GetFeedPageResponse>> handlerGetFollowPriorityFeeds(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size
+    ) {
         Pageable pageable = PageRequest.of(page, size);
+
         Page<GetFeedPageResponse> result = feedService.getFeedsByFollowPriority(pageable);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);

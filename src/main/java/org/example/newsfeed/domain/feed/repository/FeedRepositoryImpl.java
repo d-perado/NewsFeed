@@ -5,9 +5,7 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.example.newsfeed.common.entity.Feed;
-import org.example.newsfeed.common.entity.QFeed;
-import org.example.newsfeed.common.entity.QUser;
+import org.example.newsfeed.common.entity.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +17,7 @@ import java.util.List;
 public class FeedRepositoryImpl implements FeedRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
+
 
     //기간별 피드 조회
     @Override
@@ -32,7 +31,7 @@ public class FeedRepositoryImpl implements FeedRepositoryCustom {
          */
 
         BooleanBuilder builder = new BooleanBuilder();
-        //시작 날짜 존재 시 startPoint 설정 (startPoint< x <endPoint )
+        //시작 날짜 존재 시 staㅋrtPoint 설정 (startPoint < x < endPoint )
         if (startDate != null) {
             builder.and(feed.createdAt.goe(startDate));
         }

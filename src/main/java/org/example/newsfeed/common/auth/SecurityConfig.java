@@ -36,6 +36,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/users/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/feeds").permitAll()
                         .requestMatchers(HttpMethod.GET, "/feeds/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/comments").permitAll()
                         //인증 필요
                         .anyRequest().authenticated()
                 )

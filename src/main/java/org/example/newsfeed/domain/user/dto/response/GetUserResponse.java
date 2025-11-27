@@ -3,7 +3,6 @@ package org.example.newsfeed.domain.user.dto.response;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.newsfeed.common.entity.User;
-
 import java.time.LocalDateTime;
 
 @Getter

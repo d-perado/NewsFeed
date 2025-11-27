@@ -14,10 +14,8 @@ public class GetFeedPageResponse {
     private final String nickname;
     private final String content;
     private final Long likeCount;
-
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
-
 
     public static GetFeedPageResponse from(FeedDTO dto) {
         return new GetFeedPageResponse(
@@ -29,5 +27,4 @@ public class GetFeedPageResponse {
                 dto.getUpdatedAt()
         );
     }
-
 }

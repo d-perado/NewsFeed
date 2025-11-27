@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Service
 @RequiredArgsConstructor
 public class FollowService {
@@ -38,6 +37,7 @@ public class FollowService {
         }
 
         User followedUser = getUser(findUser.getId());
+
         User followingUser = getUser(followingUserId);
 
         Follow follow = Follow.from(followedUser, followingUser);

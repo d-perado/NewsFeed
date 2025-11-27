@@ -21,6 +21,7 @@ public class FollowController {
     @PostMapping("/follows")
     public ResponseEntity<CreateFollowResponse> handlerCreateFollow(@AuthenticationPrincipal UserDetails user,
                                                                     @RequestParam Long fromUserId) {
+
         CreateFollowResponse createFollowResponse = followService.createFollow(user,fromUserId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createFollowResponse);
@@ -30,6 +31,7 @@ public class FollowController {
     @DeleteMapping("/follows")
     public ResponseEntity<Void> handlerDeleteFollow(@AuthenticationPrincipal UserDetails user,
                                                     @RequestParam Long fromUserId) {
+
         followService.deleteFollow(user, fromUserId);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

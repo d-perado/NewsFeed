@@ -13,4 +13,6 @@ public interface CommentLikeRepository extends JpaRepository<CommentLike, Long> 
 
     // 해당 댓글의 총 좋아요 개수 조회
     Long countByComment(Comment comment);
+
+    void deleteAllByComment_Id(Long commentId);
 }
