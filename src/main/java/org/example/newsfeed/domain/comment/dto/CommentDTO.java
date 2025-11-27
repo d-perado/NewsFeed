@@ -18,11 +18,11 @@ public class CommentDTO {
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
+
     public static CommentDTO from(Comment comment) {
         return new CommentDTO(
                 comment.getId(),
-                FeedDTO.from(
-                        comment.getFeed()),
+                FeedDTO.from(comment.getFeed()),
                 UserDTO.from(comment.getUser()),
                 comment.getContent(),
                 comment.getCreatedAt(),
