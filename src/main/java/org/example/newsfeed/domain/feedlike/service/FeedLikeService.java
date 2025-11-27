@@ -98,6 +98,6 @@ public class FeedLikeService {
         feed.decreaseLike();
 
         // 5. 현재 좋아요 수 반환
-        Long currentLikeCount = feedLikeRepository.countByFeed(feed);
+//        Long currentLikeCount = feedLikeRepository.countByFeed(feed);
     }
 }
