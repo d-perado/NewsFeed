@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 @Repository
 public interface FollowRepository extends JpaRepository<Follow, Long> {
+    // 팔로우 관계 존재 유무
     boolean existsByTo_IdAndFrom_Id(Long followedUserId, Long followingUserId);
 
     // 팔로워 목록
@@ -29,6 +30,7 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
 """)
     Page<User> findFollowingsByFrom_Id(Long userId, Pageable pageable);
 
+    // 팔로우 관계 삭제
     void deleteFollowByTo_IdAndFrom_Id(Long followedUserId, Long followingUserId);
 
     List<Follow> findAllByTo_Id(Long followingUserId);
