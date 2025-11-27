@@ -88,7 +88,6 @@ public class FeedController {
         return ResponseEntity.status(HttpStatus.OK).body(feedService.updateFeed(feedId, request, userEmail));
     }
 
-
     /**
      * 피드 삭제 - 추후, JWT 구현 후 리팩터링 예정
      */
@@ -103,7 +102,7 @@ public class FeedController {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
+    //기간별 검색 기능
     @GetMapping("/feeds/period")
     public ResponseEntity<Page<GetFeedResponse>> handlerGetPeriodFeeds(
             @RequestBody GetPeriodsFeedRequest request,
@@ -115,7 +114,7 @@ public class FeedController {
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
-
+    //내가 팔로우한 사람 피드 우선 조회
     @GetMapping("/users/me/feeds")
     public ResponseEntity<Page<GetFeedPageResponse>> handlerGetFollowPriorityFeeds(
             @RequestParam(defaultValue = "0") int page,

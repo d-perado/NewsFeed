@@ -1,6 +1,5 @@
 package org.example.newsfeed.domain.comment.dto.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.newsfeed.domain.comment.dto.CommentDTO;

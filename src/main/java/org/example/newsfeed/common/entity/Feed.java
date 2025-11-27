@@ -12,25 +12,29 @@ import org.example.newsfeed.domain.feed.dto.request.UpdateFeedRequest;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Feed extends TimeBaseEntity {
+
+    // feeds 프라이머리 키
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    // 유저키
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User writer;
-
+    // 댓글
     @Column
     private String content;
 
     @Column
     private Long likeCount = 0L;
 
+    // feed 생성자
     public Feed(User writer, String content) {
         this.writer = writer;
         this.content = content;
     }
 
+    // 피드 업데이트 기능
     public void modify(UpdateFeedRequest request) {
         this.content = request.getContent() != null ? request.getContent() : this.content;
     }
