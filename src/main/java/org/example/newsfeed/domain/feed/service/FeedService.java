@@ -49,7 +49,6 @@ public class FeedService {
     }
 
     //피드 전체 조회
-
     @Transactional(readOnly = true)
     public Page<GetFeedPageResponse> getFeeds(Pageable pageable) {
         Page<Feed> feedList = feedRepository.findAll(pageable);

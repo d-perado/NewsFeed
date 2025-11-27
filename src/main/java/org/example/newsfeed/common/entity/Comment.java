@@ -20,7 +20,7 @@ public class Comment extends TimeBaseEntity {
     @Column
     private String content;
 
-    @Column(nullable = false)
+    @Column
     private Long likeCount = 0L;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -32,7 +32,6 @@ public class Comment extends TimeBaseEntity {
     private User user;
 
     public Comment(String content, Feed feed, User user) {
-        super();
         this.content = content;
         this.feed = feed;
         this.user = user;
