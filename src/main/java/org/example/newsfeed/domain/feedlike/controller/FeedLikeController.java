@@ -19,7 +19,7 @@ public class FeedLikeController {
     private final FeedLikeService feedLikeService;
 
     /**
-     * 댓글 좋아요
+     * 피드 좋아요
      */
     @PostMapping("/feeds/{feedId}/likes")
     public ResponseEntity<LikeFeedResponse> handlerCreateFeedLike(
@@ -45,6 +45,6 @@ public class FeedLikeController {
 
         feedLikeService.unlikeFeed(feedId, userEmail);
 
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

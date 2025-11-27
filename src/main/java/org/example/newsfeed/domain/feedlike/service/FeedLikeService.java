@@ -26,10 +26,6 @@ public class FeedLikeService {
      */
     public LikeFeedResponse likeFeed(Long feedId, String userEmail) {
 
-//        사용자가 게시물이나 댓글에 좋아요를 남기거나 취소할 수 있습니다.
-//        본인이 작성한 게시물과 댓글에 좋아요를 남길 수 없습니다.
-//        같은 게시물에는 사용자당 한 번만 좋아요가 가능합니다.
-
         // 1. 해당 피드가 있는지 조회
         Feed feed = feedRepository.findById(feedId).orElseThrow(
                 () -> new IllegalStateException("해당 피드가 없습니다.")
@@ -75,6 +71,9 @@ public class FeedLikeService {
 
     }
 
+    /**
+     * 피드 좋아요 취소
+     */
     public void unlikeFeed(Long feedId, String userEmail) {
         // 1. 해당 피드가 있는지 조회
         Feed feed = feedRepository.findById(feedId).orElseThrow(
@@ -96,8 +95,5 @@ public class FeedLikeService {
 
         // 4. 좋아요 카운트 감소
         feed.decreaseLike();
-
-        // 5. 현재 좋아요 수 반환
-//        Long currentLikeCount = feedLikeRepository.countByFeed(feed);
     }
 }
