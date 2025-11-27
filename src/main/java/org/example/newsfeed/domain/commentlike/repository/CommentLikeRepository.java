@@ -1,4 +1,4 @@
-package org.example.newsfeed.domain.comentlike.repository;
+package org.example.newsfeed.domain.commentlike.repository;
 
 import org.example.newsfeed.common.entity.Comment;
 import org.example.newsfeed.common.entity.CommentLike;

@@ -2,7 +2,6 @@ package org.example.newsfeed.domain.comment.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.newsfeed.domain.comentlike.service.CommentLikeService;
 import org.example.newsfeed.domain.comment.dto.request.CreateCommentRequest;
 import org.example.newsfeed.domain.comment.dto.response.CreateCommentResponse;
 import org.example.newsfeed.domain.comment.dto.request.UpdateCommentRequest;

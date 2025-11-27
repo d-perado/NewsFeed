@@ -1,8 +1,8 @@
-package org.example.newsfeed.domain.comentlike.controller;
+package org.example.newsfeed.domain.commentlike.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.newsfeed.domain.comentlike.dto.response.CommentLikeResponse;
-import org.example.newsfeed.domain.comentlike.service.CommentLikeService;
+import org.example.newsfeed.domain.commentlike.dto.response.CommentLikeResponse;
+import org.example.newsfeed.domain.commentlike.service.CommentLikeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;

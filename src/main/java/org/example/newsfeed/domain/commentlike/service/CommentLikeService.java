@@ -1,4 +1,4 @@
-package org.example.newsfeed.domain.comentlike.service;
+package org.example.newsfeed.domain.commentlike.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.newsfeed.common.entity.Comment;
@@ -6,8 +6,8 @@ import org.example.newsfeed.common.entity.CommentLike;
 import org.example.newsfeed.common.entity.User;
 import org.example.newsfeed.common.exception.CustomException;
 import org.example.newsfeed.common.exception.ErrorMessage;
-import org.example.newsfeed.domain.comentlike.dto.response.CommentLikeResponse;
-import org.example.newsfeed.domain.comentlike.repository.CommentLikeRepository;
+import org.example.newsfeed.domain.commentlike.dto.response.CommentLikeResponse;
+import org.example.newsfeed.domain.commentlike.repository.CommentLikeRepository;
 import org.example.newsfeed.domain.comment.repository.CommentRepository;
 import org.example.newsfeed.domain.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
