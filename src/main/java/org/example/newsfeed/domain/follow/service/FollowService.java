@@ -22,7 +22,7 @@ public class FollowService {
     private final FollowRepository followRepository;
     private final UserRepository userRepository;
 
-
+    //팔로우 생성
     @Transactional
     public CreateFollowResponse createFollow(UserDetails user, Long followingUserId) {
         User findUser = userRepository.findByEmail(user.getUsername()).orElseThrow(()-> new CustomException(ErrorMessage.NOT_FOUND_USER));
@@ -46,7 +46,8 @@ public class FollowService {
 
         return CreateFollowResponse.from(savedFollow);
     }
-
+    
+    //팔로우 삭제
     @Transactional
     public void deleteFollow(UserDetails user, Long followingUserId) {
         User findUser = userRepository.findByEmail(user.getUsername()).orElseThrow(()-> new CustomException(ErrorMessage.NOT_FOUND_USER));
@@ -57,7 +58,8 @@ public class FollowService {
         }
         followRepository.deleteFollowByTo_IdAndFrom_Id(findUser.getId(), followingUserId);
     }
-
+    
+    //팔로잉 목록
     @Transactional(readOnly = true)
     public Page<UserDTO> getAllFollowing(UserDetails user, int page, int size) {
         User findUser = userRepository.findByEmail(user.getUsername()).orElseThrow(()-> new CustomException(ErrorMessage.NOT_FOUND_USER));
@@ -68,6 +70,7 @@ public class FollowService {
         return following.map(UserDTO::from);
     }
 
+    //팔로워 목록
     @Transactional(readOnly = true)
     public Page<UserDTO> getAllFollower(UserDetails user, int page, int size) {
         User findUser = userRepository.findByEmail(user.getUsername()).orElseThrow(()-> new CustomException(ErrorMessage.NOT_FOUND_USER));
@@ -78,6 +81,7 @@ public class FollowService {
         return followers.map(UserDTO::from);
     }
 
+    //유저 존재 유무 체크
     private User getUser(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorMessage.NOT_FOUND_USER));

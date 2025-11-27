@@ -20,16 +20,23 @@ public class FeedRepositoryImpl implements FeedRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
+    //기간별 피드 조회
     @Override
     public Page<Feed> findAllsByCreatedAtBetween(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
         QFeed feed = QFeed.feed;
 
-        BooleanBuilder builder = new BooleanBuilder();
+        /*
+       시작 날짜 입력 안하면 마지막 날짜 이전의 모든 피드
+       마지막 날짜 입력 안하면 시작 날짜 이후의 모든 피드
+       둘 다 입력 안하면 모든 피드
+         */
 
+        BooleanBuilder builder = new BooleanBuilder();
+        //시작 날짜 존재 시 startPoint 설정 (startPoint< x <endPoint )
         if (startDate != null) {
             builder.and(feed.createdAt.goe(startDate));
         }
-
+        //마지막 날짜 존재 시 endPoint 설정
         if (endDate != null) {
             builder.and(feed.createdAt.loe(endDate));
         }
@@ -52,7 +59,8 @@ public class FeedRepositoryImpl implements FeedRepositoryCustom {
 
         return new PageImpl<>(results, pageable, total);
     }
-
+    
+    //팔로우 우선 검색
     @Override
     public Page<Feed> findByFollowPriority(Long loginUserId, List<Long> followingIds, Pageable pageable) {
 

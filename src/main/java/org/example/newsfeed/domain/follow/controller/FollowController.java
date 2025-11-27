@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class FollowController {
 
     private final FollowService followService;
+
     //팔로우
     @PostMapping("/follows")
     public ResponseEntity<CreateFollowResponse> handlerCreateFollow(@AuthenticationPrincipal UserDetails user,
@@ -24,6 +25,7 @@ public class FollowController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createFollowResponse);
     }
+
     //언팔로우
     @DeleteMapping("/follows")
     public ResponseEntity<Void> handlerDeleteFollow(@AuthenticationPrincipal UserDetails user,
@@ -32,6 +34,7 @@ public class FollowController {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
     //팔로워 조회
     @GetMapping("/followers")
     public ResponseEntity<Page<UserDTO>> handlerGetAllFollowers(@AuthenticationPrincipal UserDetails user,
@@ -42,6 +45,7 @@ public class FollowController {
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
+
     //팔로잉 조회
     @GetMapping("/followings")
     public ResponseEntity<Page<UserDTO>> handlerGetAllFollowings(@AuthenticationPrincipal UserDetails user,
