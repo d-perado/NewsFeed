@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 public class CommentController {
 
     private final CommentService commentService;
-    private final CommentLikeService commentLikeService;
 
     // 댓글생성
     @PostMapping("/feeds/{feedId}/comments")

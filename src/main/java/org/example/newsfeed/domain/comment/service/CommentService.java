@@ -9,7 +9,6 @@ import org.example.newsfeed.domain.comment.dto.request.UpdateCommentRequest;
 import org.example.newsfeed.domain.comment.dto.response.CreateCommentResponse;
 import org.example.newsfeed.domain.comment.dto.response.GetCommentPageResponse;
 import org.example.newsfeed.domain.comment.dto.response.UpdateCommentResponse;
-import org.example.newsfeed.domain.comentlike.repository.CommentLikeRepository;
 import org.example.newsfeed.domain.feed.repository.FeedRepository;
 import org.example.newsfeed.domain.user.repository.UserRepository;
 import org.springframework.data.domain.Page;
@@ -30,7 +29,6 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final FeedRepository feedRepository;
     private final UserRepository userRepository;
-    private final CommentLikeRepository commentLikeRepository;
 
     // 생성
     public CreateCommentResponse save(Long feedId, CreateCommentRequest request, String email) {
