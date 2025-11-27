@@ -39,7 +39,7 @@ public class JwtTokenProvider {
         long now = (new Date()).getTime();
 
         // Access Token 생성
-        Date accessTokenExpiresIn = new Date(now + 86400000);
+        Date accessTokenExpiresIn = new Date(now + 3600000);
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim("auth", authorities)
@@ -49,7 +49,7 @@ public class JwtTokenProvider {
 
         // Refresh Token 생성
         String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now + 86400000))
+                .setExpiration(new Date(now + 3600000))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
@@ -60,7 +60,7 @@ public class JwtTokenProvider {
                 .build();
     }
 
-    // Jwt 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드
+    // AccessToken에서 Authentication 객체 추출
     public Authentication getAuthentication(String accessToken) {
         // Jwt 토큰 복호화
         Claims claims = parseClaims(accessToken);
@@ -69,18 +69,16 @@ public class JwtTokenProvider {
             throw new CustomException(ErrorMessage.TOKEN_AUTHORITY_MISSING);
         }
 
-        // 클레임에서 권한 정보 가져오기
+        // 저장된 auth 문자열 → GrantedAuthority 리스트로 변환
         Collection<? extends GrantedAuthority> authorities = Arrays.stream(claims.get("auth").toString().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
-        // UserDetails 객체를 만들어서 Authentication return
-        // UserDetails: interface, User: UserDetails를 구현한 class
         UserDetails principal = new User(claims.getSubject(), "N/A", authorities);
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 
-    // 토큰 정보를 검증하는 메서드
+    // JWT 유효성 검사
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
@@ -101,7 +99,7 @@ public class JwtTokenProvider {
     }
 
 
-    // accessToken
+    // Claims(토큰 내부 데이터) 추출
     private Claims parseClaims(String accessToken) {
         try {
             return Jwts.parserBuilder()

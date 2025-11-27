@@ -25,17 +25,18 @@ public class SecurityConfig {
         return httpSecurity
                 //웹 브라우저 기본 로그인 창 사용 안함
                 .httpBasic(AbstractHttpConfigurer::disable)
-                //CSRF 공경방지 기능 꺼두기 (REST API + JWT는 세션이 없기 때문에 필요 없음)
+                //CSRF 비활성화 (REST API + JWT는 세션이 없기 때문에 필요 없음)
                 .csrf(AbstractHttpConfigurer::disable)
                 // 세션을 사용하지 않겠다는 설정 (JWT 방식이기 때문에 필요 없음)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // URL 주소별 접근 권한 설정
                 .authorizeHttpRequests(auth -> auth
-                        // 로그인 API는 누구나 접근 가능
+                        //누구나 접근 가능
                         .requestMatchers("/users", "/users/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/users/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/feeds").permitAll()
                         .requestMatchers(HttpMethod.GET, "/feeds/*").permitAll()
+                        //인증 필요
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)

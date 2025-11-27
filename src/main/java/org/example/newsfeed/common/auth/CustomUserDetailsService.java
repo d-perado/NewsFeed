@@ -14,20 +14,20 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
+    // email로 사용자 조회
     @Override
-
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email)
                 .map(this::createUserDetails)
                 .orElseThrow(() -> new CustomException(ErrorMessage.NOT_FOUND_USER));
     }
 
-    // 해당하는 User 의 데이터가 존재한다면 UserDetails 객체로 만들어서 return
+    // 조회된 USER 엔티티를 스프링 시큐리티의 UserDetails 객체로 변환
     private UserDetails createUserDetails(User user) {
         return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getUsername())
-                .password(user.getPassword())
-                .roles("USER")
+                .username(user.getUsername()) // 인증 시 사용할 username(email)
+                .password(user.getPassword()) // 인코딩된 비밀번호
+                .roles("USER")  // 기본 USER 권한 부여
                 .build();
     }
 }
