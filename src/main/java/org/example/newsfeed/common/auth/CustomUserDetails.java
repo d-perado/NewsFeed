@@ -12,23 +12,22 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
 
-    // 필요한 값만 추가 및 생성자
-    // id, username
     private final Long id;
     private final String email;
     private final String password;
     private final List<GrantedAuthority> authorities;
 
+    //사용자 권한 반환
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.authorities;
     }
-
+    // 사용자 비밀번호 반환
     @Override
     public String getPassword() {
         return this.password;
     }
-
+    //스프링 시큐리티의 username = email
     @Override
     public String getUsername() {
         return this.email;
