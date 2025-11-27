@@ -25,6 +25,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     // 조회된 USER 엔티티를 스프링 시큐리티의 UserDetails 객체로 변환
     private UserDetails createUserDetails(User user) {
+
+        if (user.isDeleted()) {
+            throw new CustomException(ErrorMessage.NOT_FOUND_USER);
+        }
+
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getUsername()) // 인증 시 사용할 username(email)
                 .password(user.getPassword()) // 인코딩된 비밀번호
