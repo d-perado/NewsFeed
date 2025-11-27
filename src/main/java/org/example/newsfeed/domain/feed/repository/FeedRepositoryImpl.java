@@ -66,21 +66,26 @@ public class FeedRepositoryImpl implements FeedRepositoryCustom {
         QFeed feed = QFeed.feed;
         QUser user = QUser.user;
 
+        List<Long> safeIds = followingIds.isEmpty()
+                ? Collections.singletonList(-1L)
+                : followingIds;
+        System.out.println(followingIds);
+
         NumberExpression<Integer> followPriority =
                 Expressions.numberTemplate(
                         Integer.class,
-                        "CASE WHEN {0} IN ({1}) THEN 0 ELSE 1 END",
+                        "case when {0} in ({1}) then 0 else 1 end",
                         user.id,
-                        followingIds.isEmpty() ? Collections.singleton(-1L) : followingIds
+                        safeIds
                 );
 
         List<Feed> result = queryFactory
                 .selectFrom(feed)
                 .join(feed.writer, user).fetchJoin()
+                .where(feed.id.isNotNull())
                 .orderBy(
-                        followPriority.asc(),  // 팔로우한 사람 먼저
-                        feed.createdAt.desc()  // 최신순
-                )
+                        followPriority.asc(),
+                        feed.createdAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -89,6 +94,8 @@ public class FeedRepositoryImpl implements FeedRepositoryCustom {
                 .select(feed.count())
                 .from(feed)
                 .fetchOne();
+
+        total = total != null ? total : 0L;
 
         return new PageImpl<>(result, pageable, total);
     }
