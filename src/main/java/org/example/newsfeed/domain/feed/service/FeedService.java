@@ -31,7 +31,6 @@ public class FeedService {
     private final FeedRepository feedRepository;
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
-    private final FeedLikeRepository feedLikeRepository;
 
     /**
      * 피드 생성
