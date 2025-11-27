@@ -1,4 +1,4 @@
-package org.example.newsfeed.domain.follow.dto;
+package org.example.newsfeed.domain.follow.dto.response;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

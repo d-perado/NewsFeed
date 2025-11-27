@@ -1,4 +1,4 @@
-package org.example.newsfeed.domain.comment.dto.response;
+package org.example.newsfeed.domain.comentlike.dto.response;
 
 
 import lombok.Getter;

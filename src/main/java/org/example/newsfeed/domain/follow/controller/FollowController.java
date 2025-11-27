@@ -1,7 +1,7 @@
 package org.example.newsfeed.domain.follow.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.newsfeed.domain.follow.dto.CreateFollowResponse;
+import org.example.newsfeed.domain.follow.dto.response.CreateFollowResponse;
 import org.example.newsfeed.domain.follow.service.FollowService;
 import org.example.newsfeed.domain.user.dto.UserDTO;
 import org.springframework.data.domain.Page;

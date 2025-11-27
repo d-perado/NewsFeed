@@ -5,7 +5,7 @@ import org.example.newsfeed.common.entity.Follow;
 import org.example.newsfeed.common.entity.User;
 import org.example.newsfeed.common.exception.CustomException;
 import org.example.newsfeed.common.exception.ErrorMessage;
-import org.example.newsfeed.domain.follow.dto.CreateFollowResponse;
+import org.example.newsfeed.domain.follow.dto.response.CreateFollowResponse;
 import org.example.newsfeed.domain.follow.repository.FollowRepository;
 import org.example.newsfeed.domain.user.dto.UserDTO;
 import org.example.newsfeed.domain.user.repository.UserRepository;

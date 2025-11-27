@@ -1,8 +1,8 @@
 package org.example.newsfeed.domain.comment.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.newsfeed.domain.comentlike.service.CommentLikeService;
 import org.example.newsfeed.domain.comment.dto.request.CreateCommentRequest;
-import org.example.newsfeed.domain.comment.dto.response.CommentLikeResponse;
 import org.example.newsfeed.domain.comment.dto.response.CreateCommentResponse;
 import org.example.newsfeed.domain.comment.dto.request.UpdateCommentRequest;
 import org.example.newsfeed.domain.comment.dto.response.GetCommentPageResponse;
@@ -14,7 +14,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 public class CommentController {
 
     private final CommentService commentService;
+    private final CommentLikeService commentLikeService;
 
     // 댓글생성
     @PostMapping("/feeds/{feedId}/comments")
@@ -76,17 +76,5 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    // Like 좋아요 b
-    @PostMapping("/comments/{commentId}/likes")
-    public ResponseEntity<CommentLikeResponse> handlerLikeComment(
-            @PathVariable("commentId") Long commentId,
-            // Authentication 객체에서 사용자 이름(ID)을 안전하게 추출
-            Authentication authentication
-    ) {
-        // 주로 User 엔티티의 username/email을 반환합니다.
-        CommentLikeResponse likeResponse = commentService.toggleLike(commentId, authentication.getName());
-
-        return ResponseEntity.ok(likeResponse);
-    }
 }
 
