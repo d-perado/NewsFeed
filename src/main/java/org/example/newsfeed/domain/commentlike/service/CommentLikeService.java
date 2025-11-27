@@ -23,40 +23,36 @@ public class CommentLikeService {
 
     public CommentLikeResponse toggleLike(Long commentId, String email) {
 
-        // 1. User와 Comment 엔티티 조회
+        // 사용자 조회
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorMessage.NOT_FOUND_USER));
-
+        // 댓글 조회
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(ErrorMessage.NOT_FOUND_COMMENT));
 
-        // 2. 좋아요 기록 확인
+        // 기존 좋아요 여부 확인
         Optional<CommentLike> existingLike = commentLikeRepository.findByUserAndComment(user, comment);
 
         boolean isLiked;
 
         if (existingLike.isPresent()) {
-            // 3. 좋아요 취소
+            // 좋아요 취소
             commentLikeRepository.delete(existingLike.get());
-
-            // 💡 Comment 엔티티의 좋아요 카운트 감소
-            comment.decreaseLikes();
+            comment.decreaseLikes();// 댓글 좋아요 수 감소
             isLiked = false;
 
         } else {
-            // 4. 좋아요 추가
+            // 좋아요 추가
             CommentLike newLike = new CommentLike(user, comment);
             commentLikeRepository.save(newLike);
-
-            // Comment 엔티티의 좋아요 카운트 증가
-            comment.increaseLikes();
+            comment.increaseLikes();// 댓글 좋아요 수 증가
             isLiked = true;
         }
 
-        // 5. 최종 좋아요 수 계산
+        // 최종 좋아요 수 조회
         Long likeCount = commentLikeRepository.countByComment(comment);
 
-        // 6. 응답 DTO 반환
+        // 응답 DTO 반환
         return new CommentLikeResponse(commentId, user.getId(), isLiked, likeCount);
     }
 }

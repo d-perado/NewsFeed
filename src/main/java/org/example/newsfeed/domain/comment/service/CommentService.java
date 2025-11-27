@@ -30,7 +30,7 @@ public class CommentService {
     private final FeedRepository feedRepository;
     private final UserRepository userRepository;
 
-    // 생성
+    // 댓글 생성
     public CreateCommentResponse save(Long feedId, CreateCommentRequest request, String email) {
         Feed feed = feedRepository.findById(feedId).orElseThrow(
                 () -> new CustomException(ErrorMessage.NOT_FOUND_FEED)
@@ -53,7 +53,7 @@ public class CommentService {
 
     }
 
-    // 전체 조회
+    // 댓글 전체 조회
     @Transactional(readOnly = true)
     public Page<GetCommentPageResponse> getAll(Pageable pageable) {
         Page<Comment> commentPage = commentRepository.findAll(pageable);
