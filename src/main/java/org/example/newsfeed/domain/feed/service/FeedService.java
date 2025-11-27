@@ -125,13 +125,12 @@ public class FeedService {
     public Page<GetFeedPageResponse> getFeedsByFollowPriority(Pageable pageable) {
 
         String email = SecurityUtil.getLoginUserEmail();
-        System.out.println("email: " + email);
 
         User loginUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorMessage.NOT_FOUND_USER));
 
         List<Long> followingIds = followRepository
-                .findAllByTo_Id(loginUser.getId())
+                .findAllByFrom_Id(loginUser.getId())
                 .stream()
                 .map(f -> f.getTo().getId())
                 .toList();
