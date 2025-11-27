@@ -8,6 +8,10 @@
 사용자가 피드를 올리고, 댓글·좋아요·팔로우를 통해 소통하는 SNS 형태의 뉴스피드 서비스입니다.
 도메인 단위 아키텍처를 적용해 기능별 확장성과 유지보수성을 높였고, JWT 인증을 기반으로 안전한 사용자 인증 환경을 제공합니다.
 
+# API 명세
+
+https://plucky-raincoat-f93.notion.site/API-2b80a0fa496d81d98854efd6f41a0dc0?source=copy_link
+
 # 😈 ERD
 
 ![erd.png](erd.png)
