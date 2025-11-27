@@ -54,7 +54,7 @@ public class FollowService {
 
         boolean existence = followRepository.existsByTo_IdAndFrom_Id(findUser.getId(), followingUserId);
         if (!existence) {
-            throw new CustomException(ErrorMessage.NOT_FOLLOWING);
+            throw new CustomException(ErrorMessage.NOT_FOUND_FOLLOWING);
         }
         followRepository.deleteFollowByTo_IdAndFrom_Id(findUser.getId(), followingUserId);
     }

@@ -20,7 +20,6 @@ import org.example.newsfeed.domain.comment.repository.CommentRepository;
 import org.springframework.stereotype.Service;
 import org.example.newsfeed.common.entity.Comment;
 
-
 @RequiredArgsConstructor
 @Transactional
 @Service
@@ -32,6 +31,7 @@ public class CommentService {
 
     // 댓글 생성
     public CreateCommentResponse save(Long feedId, CreateCommentRequest request, String email) {
+
         Feed feed = feedRepository.findById(feedId).orElseThrow(
                 () -> new CustomException(ErrorMessage.NOT_FOUND_FEED)
         );
@@ -40,11 +40,7 @@ public class CommentService {
                 () -> new CustomException(ErrorMessage.NOT_FOUND_USER)
         );
 
-        Comment comment = new Comment(
-                request.getContent(),
-                feed,
-                user
-        );
+        Comment comment = new Comment(request.getContent(), feed, user);
 
         commentRepository.save(comment);
         CommentDTO dto = CommentDTO.from(comment);
@@ -56,6 +52,7 @@ public class CommentService {
     // 댓글 전체 조회
     @Transactional(readOnly = true)
     public Page<GetCommentPageResponse> getAll(Pageable pageable) {
+
         Page<Comment> commentPage = commentRepository.findAll(pageable);
 
         return commentPage.map(comment -> GetCommentPageResponse.from(CommentDTO.from(comment)));
@@ -63,15 +60,12 @@ public class CommentService {
 
     // 댓글 수정
     public UpdateCommentResponse update(Long commentId, UpdateCommentRequest request, String email) {
+
         Comment comment = commentRepository.findById(commentId).orElseThrow(
                 () -> new CustomException(ErrorMessage.NOT_FOUND_COMMENT)
         );
 
-        boolean emailEquals = comment.getUser().getEmail().equals(email);
-
-        if(!emailEquals) {
-            throw new CustomException(ErrorMessage.EMAIL_NOT_MATCH);
-        }
+        checkOwnerEmail(email, comment);
 
         comment.modify(request);
         CommentDTO dto = CommentDTO.from(comment);
@@ -87,14 +81,16 @@ public class CommentService {
                 () -> new CustomException(ErrorMessage.NOT_FOUND_COMMENT)
         );
 
+        checkOwnerEmail(email, comment);
+
+        commentRepository.deleteById(commentId);
+    }
+
+    private static void checkOwnerEmail(String email, Comment comment) {
         boolean emailEquals = comment.getUser().getEmail().equals(email);
 
         if(!emailEquals) {
             throw new CustomException(ErrorMessage.EMAIL_NOT_MATCH);
         }
-
-        commentRepository.deleteById(commentId);
     }
-
 }
-

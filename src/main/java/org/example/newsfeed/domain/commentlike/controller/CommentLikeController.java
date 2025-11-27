@@ -14,11 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class CommentLikeController {
 
     private final CommentLikeService commentLikeService;
+
     // 댓글 좋아요
     @PostMapping("/comments/{commentId}/likes")
     public ResponseEntity<CommentLikeResponse> handlerLikeComment(
             @PathVariable("commentId") Long commentId,
-            Authentication authentication// 인증된 사용자 정보
+            Authentication authentication
     ) {
         // 좋아요 처리 로직 실행
         CommentLikeResponse likeResponse = commentLikeService.toggleLike(commentId, authentication.getName());

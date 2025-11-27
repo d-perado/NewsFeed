@@ -11,12 +11,12 @@ import org.example.newsfeed.domain.commentlike.repository.CommentLikeRepository;
 import org.example.newsfeed.domain.comment.repository.CommentRepository;
 import org.example.newsfeed.domain.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class CommentLikeService {
+
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
     private final CommentLikeRepository commentLikeRepository;
@@ -26,6 +26,7 @@ public class CommentLikeService {
         // 사용자 조회
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorMessage.NOT_FOUND_USER));
+
         // 댓글 조회
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(ErrorMessage.NOT_FOUND_COMMENT));
@@ -36,9 +37,12 @@ public class CommentLikeService {
         boolean isLiked;
 
         if (existingLike.isPresent()) {
+
             // 좋아요 취소
             commentLikeRepository.delete(existingLike.get());
+
             comment.decreaseLikes();// 댓글 좋아요 수 감소
+
             isLiked = false;
 
         } else {

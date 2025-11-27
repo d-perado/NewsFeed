@@ -33,7 +33,9 @@ public class CommentController {
     ) {
         String userEmail = user.getUsername();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(commentService.save(feedId, request, userEmail));
+        CreateCommentResponse result = commentService.save(feedId, request, userEmail);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
 
@@ -46,7 +48,9 @@ public class CommentController {
             direction = Sort.Direction.DESC
     ) Pageable pageable) {
 
-        return ResponseEntity.ok(commentService.getAll(pageable));
+        Page<GetCommentPageResponse> result = commentService.getAll(pageable);
+
+        return ResponseEntity.ok(result);
     }
 
 
@@ -59,7 +63,9 @@ public class CommentController {
     ) {
         String userEmail = user.getUsername();
 
-        return ResponseEntity.status(HttpStatus.OK).body(commentService.update(commentId, request, userEmail));
+        UpdateCommentResponse result = commentService.update(commentId, request, userEmail);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
 
@@ -72,6 +78,7 @@ public class CommentController {
         String userEmail = user.getUsername();
 
         commentService.delete(commentId, userEmail);
+
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

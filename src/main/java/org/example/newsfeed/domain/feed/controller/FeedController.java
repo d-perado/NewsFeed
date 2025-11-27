@@ -17,12 +17,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-
-//뉴스피드 조회 기능
-//기본 정렬은 생성일자 기준으로 내림차순 정렬합니다.
-//10개씩 페이지네이션하여, 각 페이지 당 뉴스피드 데이터가 10개씩 나오게 합니다.
-
-
 @RestController
 @RequiredArgsConstructor
 public class FeedController {
@@ -82,9 +76,7 @@ public class FeedController {
         return ResponseEntity.status(HttpStatus.OK).body(feedService.updateFeed(feedId, request, userEmail));
     }
 
-    /**
-     * 피드 삭제 - 추후, JWT 구현 후 리팩터링 예정
-     */
+    //피드 삭제  */
     @DeleteMapping("/feeds/{feedId}")
     public ResponseEntity<Void> handlerDeleteFeed(
             @PathVariable Long feedId,

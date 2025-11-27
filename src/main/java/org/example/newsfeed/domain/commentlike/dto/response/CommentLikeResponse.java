@@ -1,6 +1,5 @@
 package org.example.newsfeed.domain.commentlike.dto.response;
 
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
