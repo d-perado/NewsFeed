@@ -29,6 +29,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final FeedRepository feedRepository;
     private final UserRepository userRepository;
+    private final CommentLikeRepository commentLikeRepository;
 
     // 댓글 생성
     public CreateCommentResponse save(Long feedId, CreateCommentRequest request, String email) {
@@ -87,6 +88,7 @@ public class CommentService {
 
         checkCommentOwnerEmail(email, comment);
 
+        commentLikeRepository.deleteAllByComment_Id(commentId);
 
         commentRepository.deleteById(commentId);
     }

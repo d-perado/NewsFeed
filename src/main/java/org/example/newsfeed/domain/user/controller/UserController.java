@@ -27,28 +27,36 @@ public class UserController {
     // 사용자 생성
     @PostMapping("/users")
     public ResponseEntity<CreateUserResponse> handlerCreateUser(@Valid @RequestBody CreateUserRequest request) {
+
         CreateUserResponse createdUser = userService.createUser(request);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
     // 사용자 단건조회
     @GetMapping("/users/{userId}")
     public ResponseEntity<GetUserResponse> handlerGetUser(@PathVariable Long userId) {
+
         GetUserResponse oneUser = userService.getUser(userId);
+
         return ResponseEntity.status(HttpStatus.OK).body(oneUser);
     }
     
     //자기 자신 조회
     @GetMapping("/users/self")
     public ResponseEntity<GetUserResponse> handlerGetUserSelf(@AuthenticationPrincipal UserDetails user) {
+
         GetUserResponse result = userService.getUserSelf(user);
+
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     // 사용자 전체조회
     @GetMapping("/users")
     public ResponseEntity<List<GetUserResponse>> handlerGetAllUsers() {
+
         List<GetUserResponse> allUser = userService.getAllUsers();
+
         return ResponseEntity.status(HttpStatus.OK).body(allUser);
     }
 
@@ -59,6 +67,7 @@ public class UserController {
             @Valid @RequestBody UpdateUserRequest request) {
 
         UpdateUserResponse updatedUser = userService.updateUser(user, request);
+
         return ResponseEntity.status(HttpStatus.OK).body(updatedUser);
     }
 
@@ -69,13 +78,16 @@ public class UserController {
             @Valid @RequestBody DeleteUserRequest request) {
 
         userService.deleteUser(user, request);
+
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     // 로그인 기능
     @PostMapping("/users/login")
     public ResponseEntity<JwtToken> handlerLogin(@RequestBody LoginDto loginDto) {
+
         JwtToken jwtToken = userService.login(loginDto.getEmail(), loginDto.getPassword());
+
         return ResponseEntity.status(HttpStatus.OK).body(jwtToken);
     }
 }

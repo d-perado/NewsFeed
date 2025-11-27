@@ -6,6 +6,7 @@ import org.example.newsfeed.common.auth.JwtToken;
 import org.example.newsfeed.common.auth.JwtTokenProvider;
 import org.example.newsfeed.common.exception.CustomException;
 import org.example.newsfeed.common.exception.ErrorMessage;
+import org.example.newsfeed.domain.follow.repository.FollowRepository;
 import org.example.newsfeed.domain.user.dto.request.CreateUserRequest;
 import org.example.newsfeed.domain.user.dto.request.DeleteUserRequest;
 import org.example.newsfeed.domain.user.dto.request.UpdateUserRequest;
@@ -30,6 +31,7 @@ public class UserService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
+    private final FollowRepository followRepository;
     private final PasswordEncoder passwordEncoder;
 
     // 사용자 생성
@@ -120,6 +122,7 @@ public class UserService {
         if (!passwordEncoder.matches(request.getPassword(), findUser.getPassword())) {
             throw new CustomException(ErrorMessage.PASSWORD_NOT_MATCH);
         }
+        followRepository.deleteAllByToOrFrom(findUser,findUser);
 
         userRepository.deleteById(findUser.getId());
     }
@@ -127,15 +130,11 @@ public class UserService {
 
     //로그인
     public JwtToken login(String email, String password) {
-        // 1.email + password 를 기반으로 Authentication 객체 생성
-        // 이때 authentication 은 인증 여부를 확인하는 authenticated 값이 false
+
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
 
-        // 2. 실제 검증. authenticate() 메서드를 통해 요청된 Member 에 대한 검증 진행
-        // authenticate 메서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드 실행
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        // 3. 인증 정보를 기반으로 JWT 토큰 생성
         return jwtTokenProvider.generateToken(authentication);
     }
 }

@@ -7,6 +7,7 @@ import org.example.newsfeed.common.entity.Follow;
 @Getter
 @RequiredArgsConstructor
 public class CreateFollowResponse {
+
     private final Long followTo;
     private final Long followFrom;
 
