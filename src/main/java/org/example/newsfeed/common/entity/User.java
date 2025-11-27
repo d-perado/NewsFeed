@@ -18,6 +18,7 @@ import java.util.List;
 @SQLDelete(sql = "UPDATE users SET is_Deleted = true WHERE id=?")
 
 public class User extends TimeBaseEntity implements UserDetails {
+    // User클래스의 속성
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,6 +33,7 @@ public class User extends TimeBaseEntity implements UserDetails {
     @Column
     private String introduction;
 
+    // User클래스 생성자(사용자용)
     public User(String nickname, String email, String password, String introduction) {
         this.nickname = nickname;
         this.email = email;
@@ -39,7 +41,7 @@ public class User extends TimeBaseEntity implements UserDetails {
         this.introduction = introduction;
         this.isDeleted = false;
     }
-
+    // User 내용변경 세터기능
     public void modify(String email, String password, String introduction) {
         this.email = email;
         this.password = password;

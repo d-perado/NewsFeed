@@ -25,7 +25,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    // 생성
+    // 댓글생성
     @PostMapping("/feeds/{feedId}/comments")
     public ResponseEntity<CreateCommentResponse> handlerCreateComment(
             @PathVariable("feedId") Long feedId,
@@ -38,7 +38,7 @@ public class CommentController {
     }
 
 
-    // 조회
+    // 댓글조회
     @GetMapping("/comments")
     public ResponseEntity<Page<GetCommentPageResponse>> handlerGetComment(@PageableDefault(
             size = 10,
@@ -51,7 +51,7 @@ public class CommentController {
     }
 
 
-    // 수정
+    // 댓글수정
     @PatchMapping("/comments/{commentId}")
     public ResponseEntity<UpdateCommentResponse> handlerUpdateComment(
             @PathVariable Long commentId,
@@ -64,7 +64,7 @@ public class CommentController {
     }
 
 
-    // 삭제
+    // 댓글삭제
     @DeleteMapping("/comments/{commentId}")
     public ResponseEntity<Void> handlerDeleteComment(
             @PathVariable Long commentId,

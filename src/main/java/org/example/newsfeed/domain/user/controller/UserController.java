@@ -73,6 +73,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    // 로그인 기능
     @PostMapping("/users/login")
     public ResponseEntity<JwtToken> handlerLogin(@RequestBody LoginDto loginDto) {
         JwtToken jwtToken = userService.login(loginDto.getEmail(), loginDto.getPassword());

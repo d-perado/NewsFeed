@@ -27,6 +27,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 public class UserService {
+    // UserService 속성
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
