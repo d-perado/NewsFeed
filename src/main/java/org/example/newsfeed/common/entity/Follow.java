@@ -15,12 +15,10 @@ public class Follow {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "follow_id")
     private Long id;
-
     // 팔로잉 유저키
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "followed_id")
     private User to;
-
     // 팔로워 유저키
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "following_id")

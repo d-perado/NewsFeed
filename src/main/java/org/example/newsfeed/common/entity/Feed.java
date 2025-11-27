@@ -17,17 +17,14 @@ public class Feed extends TimeBaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     // 유저키
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User writer;
-
     // 댓글
     @Column
     private String content;
-
-    // 생성자
+    // feed 생성자
     public Feed(User writer, String content) {
         this.writer = writer;
         this.content = content;
