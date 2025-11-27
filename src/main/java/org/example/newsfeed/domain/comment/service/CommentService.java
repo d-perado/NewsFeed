@@ -13,6 +13,7 @@ import org.example.newsfeed.domain.commentlike.repository.CommentLikeRepository;
 import org.example.newsfeed.domain.feed.repository.FeedRepository;
 import org.example.newsfeed.domain.user.repository.UserRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,8 @@ import org.example.newsfeed.common.entity.Feed;
 import org.example.newsfeed.domain.comment.repository.CommentRepository;
 import org.springframework.stereotype.Service;
 import org.example.newsfeed.common.entity.Comment;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional
@@ -54,13 +57,14 @@ public class CommentService {
 
     // 댓글 전체 조회
     @Transactional(readOnly = true)
-    public Page<GetCommentPageResponse> getAll(Pageable pageable) {
+    public Page<GetCommentPageResponse> getCommentByFeed(Pageable pageable, Long feedId) {
 
-        Page<Comment> commentPage = commentRepository.findAll(pageable);
+        Page<Comment> commentPage = commentRepository.findAllByFeed_Id(feedId, pageable);
 
-        return commentPage.map(comment -> GetCommentPageResponse.from(CommentDTO.from(comment)));
+        return commentPage.map(comment ->
+                GetCommentPageResponse.from(CommentDTO.from(comment))
+        );
     }
-
 
     // 댓글 수정
     public UpdateCommentResponse update(Long commentId, UpdateCommentRequest request, String email) {

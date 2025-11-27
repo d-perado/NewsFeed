@@ -39,16 +39,16 @@ public class CommentController {
     }
 
 
-    // 댓글 조회
-    @GetMapping("/comments")
+    // 게시글 댓글 조회
+    @GetMapping("/feeds/{feedId}/comments")
     public ResponseEntity<Page<GetCommentPageResponse>> handlerGetComment(@PageableDefault(
             size = 10,
             page = 0,
             sort = "createdAt",
             direction = Sort.Direction.DESC
-    ) Pageable pageable) {
+    ) Pageable pageable, @PathVariable Long feedId) {
 
-        Page<GetCommentPageResponse> result = commentService.getAll(pageable);
+        Page<GetCommentPageResponse> result = commentService.getCommentByFeed(pageable, feedId);
 
         return ResponseEntity.ok(result);
     }
