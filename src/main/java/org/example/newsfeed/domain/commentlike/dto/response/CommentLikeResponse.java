@@ -10,5 +10,5 @@ public class CommentLikeResponse {
     private final Long commentId;
     private final Long userId;
     private final boolean isLike;
-    private final Long LikeCount;
+    private final Long likeCount;
 }
