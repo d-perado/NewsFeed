@@ -13,7 +13,6 @@ import org.example.newsfeed.domain.commentlike.repository.CommentLikeRepository;
 import org.example.newsfeed.domain.feed.repository.FeedRepository;
 import org.example.newsfeed.domain.user.repository.UserRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,6 @@ import org.example.newsfeed.domain.comment.repository.CommentRepository;
 import org.springframework.stereotype.Service;
 import org.example.newsfeed.common.entity.Comment;
 
-import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional

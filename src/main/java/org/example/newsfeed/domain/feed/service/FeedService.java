@@ -79,11 +79,7 @@ public class FeedService {
                 () -> new CustomException(ErrorMessage.NOT_FOUND_FEED)
         );
 
-        boolean emailEquals = feed.getWriter().getEmail().equals(email);
-
-        if (!emailEquals) {
-            throw new CustomException(ErrorMessage.EMAIL_NOT_MATCH);
-        }
+        checkFeedOwnerEmail(email, feed);
 
         feed.modify(request);
 
@@ -101,11 +97,7 @@ public class FeedService {
                 () -> new CustomException(ErrorMessage.NOT_FOUND_FEED)
         );
 
-        boolean emailEquals = feed.getWriter().getEmail().equals(email);
-
-        if (!emailEquals) {
-            throw new CustomException(ErrorMessage.EMAIL_NOT_MATCH);
-        }
+        checkFeedOwnerEmail(email, feed);
 
         feedLikeRepository.deleteAllByFeed_Id(feedId);
         commentRepository.deleteAllByFeed_Id(feedId);
@@ -139,5 +131,13 @@ public class FeedService {
         Page<Feed> feeds = feedRepository.findByFollowPriority(loginUser.getId(), followingIds, pageable);
 
         return feeds.map(feed -> GetFeedPageResponse.from(FeedDTO.from(feed)));
+    }
+
+    private static void checkFeedOwnerEmail(String email, Feed feed) {
+        boolean emailEquals = feed.getWriter().getEmail().equals(email);
+
+        if (!emailEquals) {
+            throw new CustomException(ErrorMessage.EMAIL_NOT_MATCH);
+        }
     }
 }

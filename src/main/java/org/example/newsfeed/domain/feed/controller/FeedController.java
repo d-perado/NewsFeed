@@ -23,7 +23,6 @@ public class FeedController {
 
     private final FeedService feedService;
 
-
     // 피드 생성
     @PostMapping("/feeds")
     public ResponseEntity<CreateFeedResponse> handlerCreateFeed(
