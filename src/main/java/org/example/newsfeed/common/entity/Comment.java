@@ -49,7 +49,7 @@ public class Comment extends TimeBaseEntity {
 
     // 좋아요 갯수 감소
     public void decreaseLikes() {
-        if(this.likeCount > 0) {
+        if (this.likeCount > 0) {
             this.likeCount--;
         }
     }

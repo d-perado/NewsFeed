@@ -1,6 +1,7 @@
 package org.example.newsfeed.common.exception;
 
 import java.util.Objects;
+
 import lombok.extern.slf4j.Slf4j;
 import org.example.newsfeed.common.entity.model.ErrorResponse;
 import org.springframework.http.ResponseEntity;

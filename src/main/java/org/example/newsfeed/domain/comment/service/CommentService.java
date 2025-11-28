@@ -100,7 +100,7 @@ public class CommentService {
     private static void checkCommentOwnerEmail(String email, Comment comment) {
         boolean emailEquals = comment.getUser().getEmail().equals(email);
 
-        if(!emailEquals) {
+        if (!emailEquals) {
             throw new CustomException(ErrorMessage.EMAIL_NOT_MATCH);
         }
     }

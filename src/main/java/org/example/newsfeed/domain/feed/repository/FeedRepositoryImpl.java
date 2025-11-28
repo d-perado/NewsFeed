@@ -9,6 +9,7 @@ import org.example.newsfeed.common.entity.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -58,7 +59,7 @@ public class FeedRepositoryImpl implements FeedRepositoryCustom {
 
         return new PageImpl<>(results, pageable, total);
     }
-    
+
     //팔로우 우선 검색
     @Override
     public Page<Feed> findByFollowPriority(Long loginUserId, List<Long> followingIds, Pageable pageable) {

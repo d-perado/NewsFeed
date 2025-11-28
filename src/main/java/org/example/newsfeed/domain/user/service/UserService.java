@@ -21,6 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 @Service
@@ -122,7 +123,7 @@ public class UserService {
         if (!passwordEncoder.matches(request.getPassword(), findUser.getPassword())) {
             throw new CustomException(ErrorMessage.PASSWORD_NOT_MATCH);
         }
-        followRepository.deleteAllByToOrFrom(findUser,findUser);
+        followRepository.deleteAllByToOrFrom(findUser, findUser);
 
         userRepository.deleteById(findUser.getId());
     }

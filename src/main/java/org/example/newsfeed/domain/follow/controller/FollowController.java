@@ -22,7 +22,7 @@ public class FollowController {
     public ResponseEntity<CreateFollowResponse> handlerCreateFollow(@AuthenticationPrincipal UserDetails user,
                                                                     @RequestParam Long fromUserId) {
 
-        CreateFollowResponse createFollowResponse = followService.createFollow(user,fromUserId);
+        CreateFollowResponse createFollowResponse = followService.createFollow(user, fromUserId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createFollowResponse);
     }

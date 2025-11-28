@@ -3,6 +3,7 @@ package org.example.newsfeed.domain.feed.repository;
 import org.example.newsfeed.common.entity.Feed;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
 import java.time.LocalDateTime;
 import java.util.List;
 

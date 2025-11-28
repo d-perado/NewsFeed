@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -21,11 +22,13 @@ public class CustomUserDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.authorities;
     }
+
     // 사용자 비밀번호 반환
     @Override
     public String getPassword() {
         return this.password;
     }
+
     //스프링 시큐리티의 username = email
     @Override
     public String getUsername() {

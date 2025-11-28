@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.newsfeed.common.entity.Feed;
 import org.example.newsfeed.domain.user.dto.UserDTO;
+
 import java.time.LocalDateTime;
 
 @Getter
@@ -17,7 +18,7 @@ public class FeedDTO {
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
-    public FeedDTO(Long id, UserDTO writer, String content, Long likeCount, LocalDateTime createdAt, LocalDateTime updatedAt){
+    public FeedDTO(Long id, UserDTO writer, String content, Long likeCount, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.writer = writer;
         this.content = content;
