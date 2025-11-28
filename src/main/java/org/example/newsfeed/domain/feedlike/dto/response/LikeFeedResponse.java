@@ -15,7 +15,7 @@ public class LikeFeedResponse {
 
     public static LikeFeedResponse from(FeedLikeDTO feedLikeDTO, Long likeCount) {
         return new LikeFeedResponse(
-                feedLikeDTO.getId(),
+                feedLikeDTO.getUser().getId(),
                 feedLikeDTO.getUser().getNickname(),
                 feedLikeDTO.getFeed().getId(),
                 likeCount

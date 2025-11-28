@@ -49,7 +49,6 @@ public class FeedService {
     }
 
     //피드 전체 조회
-
     @Transactional(readOnly = true)
     public Page<GetFeedPageResponse> getFeeds(Pageable pageable) {
         Page<Feed> feedList = feedRepository.findAll(pageable);
@@ -117,13 +116,12 @@ public class FeedService {
     public Page<GetFeedPageResponse> getFeedsByFollowPriority(Pageable pageable) {
 
         String email = SecurityUtil.getLoginUserEmail();
-        System.out.println("email: " + email);
 
         User loginUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorMessage.NOT_FOUND_USER));
 
         List<Long> followingIds = followRepository
-                .findAllByTo_Id(loginUser.getId())
+                .findAllByFrom_Id(loginUser.getId())
                 .stream()
                 .map(f -> f.getTo().getId())
                 .toList();

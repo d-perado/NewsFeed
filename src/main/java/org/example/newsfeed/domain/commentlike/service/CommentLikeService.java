@@ -11,9 +11,12 @@ import org.example.newsfeed.domain.commentlike.repository.CommentLikeRepository;
 import org.example.newsfeed.domain.comment.repository.CommentRepository;
 import org.example.newsfeed.domain.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Optional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CommentLikeService {
 
